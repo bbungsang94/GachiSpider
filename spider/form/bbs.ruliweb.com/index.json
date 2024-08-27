@@ -1,0 +1,29 @@
+{
+    "/read\\/\\d+":
+    {
+        "title":{
+            "method": "select",
+            "tag": "span.subject_inner_text",
+            "attrs": ["class", ["subject_inner_text"]]
+        },
+        "images":{
+            "method": "select",
+            "tag": "#board_read div.view_content.autolink img"
+        },
+        "videos":{
+            "method": "select",
+            "tag": "#board_read div.view_content.autolink video"
+        },
+        "contents": 
+        {
+            "method": "select",
+            "tag": "#board_read div.view_content.autolink p",
+            "attrs": null
+        },
+        "hits": 
+        {
+            "method": "select",
+            "tag": "#board_read div.user_info"
+        }
+    }
+}

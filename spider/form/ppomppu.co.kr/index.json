@@ -1,0 +1,30 @@
+{
+    "\\/zboard\\/id=freeboard&no=\\d+":
+    {
+        "title":{
+            "method": "select",
+            "tag": "#topTitle h1",
+            "attrs": null
+        },
+        "images":{
+            "method": "select",
+            "tag": "table.pic_bg img"
+        },
+        "videos":{
+            "method": "select",
+            "tag": "table.pic_bg video"
+        },
+        "contents": 
+        {
+            "method": "select",
+            "tag": "table.pic_bg p",
+            "attrs": null
+        },
+        "hits": 
+        {
+            "method": "select",
+            "tag": "div.topTitle-box li",
+            "attrs": null
+        }
+    }
+}

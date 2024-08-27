@@ -1,0 +1,17 @@
+from .base import State
+from spider.structure import Node
+
+
+class Failed(State):
+    def __init__(self, node: Node, parent):
+        super(Failed, self).__init__("failed", node=node, parent=parent)
+        
+    def run(self):
+        pass
+    
+    def pause(self):
+        pass
+    
+    def stop(self):
+        pass
+    

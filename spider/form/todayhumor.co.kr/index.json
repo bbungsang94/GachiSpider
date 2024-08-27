@@ -1,0 +1,30 @@
+{
+    "\\/board\\/table=humordata&no=\\d+&s_no=\\d+":
+    {
+        "title":{
+            "method": "select",
+            "tag": "#containerInner div.viewSubjectDiv div",
+            "attrs": null
+        },
+        "images":{
+            "method": "select",
+            "tag": "#containerInner div.viewContent img"
+        },
+        "videos":{
+            "method": "select",
+            "tag": "#containerInner div.viewContent video"
+        },
+        "contents": 
+        {
+            "method": "select",
+            "tag": "#containerInner div.article-view-contents p",
+            "attrs": ["class", ["contents-txt"]]
+        },
+        "hits": 
+        {
+            "method": "select",
+            "tag": "#containerInner div.writerInfoContents",
+            "attrs": null
+        }
+    }
+}

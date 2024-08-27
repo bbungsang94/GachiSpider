@@ -1,0 +1,27 @@
+{
+    "\\/code=strange&No=\\d+":
+    {
+        "title":{
+            "method": "select",
+            "tag": "#print_area div.writerProfile dt",
+            "attrs": ["itemscope", ""]
+        },
+        "images":{
+            "method": "select",
+            "tag": "#print_area div.bodyCont img",
+            "attrs": ["style", "cursor:pointer;"]
+        },
+        "contents": 
+        {
+            "method": "select",
+            "tag": "#print_area div.bodyCont p",
+            "attrs": null
+        },
+        "hits": 
+        {
+            "method": "select",
+            "tag": "em.txtType",
+            "attrs": ["class", ["txtType"]]
+        }
+    }
+}

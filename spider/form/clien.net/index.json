@@ -1,0 +1,24 @@
+{
+    "\\/service\\/board\\/park\\/\\d+": {
+        "title": {
+          "method": "select",
+          "tag": "#div_content h3.post_subject span",
+          "attrs": null
+        },
+        "images": {
+          "method": "select",
+          "tag": "#div_content div.post_article img",
+          "attrs": ["data-role", "attach-image"]
+        },
+        "contents": {
+          "method": "select",
+          "tag": "#div_content div.post_article p",
+          "attrs": null
+        },
+        "hits": {
+          "method": "select",
+          "tag": "#div_content div.view_info strong",
+          "attrs": null
+        }
+    }
+}

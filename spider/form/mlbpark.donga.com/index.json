@@ -1,0 +1,28 @@
+{
+    "&id=\\d+&select=&query=&subselect=&subquery=&user=&site=&reply=&source=&pos=&sig=*":
+    {
+        "title":{
+            "method": "select",
+            "tag": "#container div.titles"
+        },
+        "images":{
+            "method": "select",
+            "tag": "#container div.ar_txt img"
+        },
+        "videos":{
+            "method": "select",
+            "tag": "#container div.ar_txt video"
+        },
+        "contents": 
+        {
+            "method": "select",
+            "tag": "#container div.ar_txt",
+            "attrs": null
+        },
+        "hits": 
+        {
+            "method": "select",
+            "tag": "#container div.text_left"
+        }
+    }
+}

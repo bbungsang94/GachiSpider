@@ -1,0 +1,30 @@
+{
+    "\\/\\d+":
+    {
+        "title":{
+            "method": "select",
+            "tag": "span.np_18px_span",
+            "attrs": ["class", ["np_18px_span"]]
+        },
+        "images":{
+            "method": "select",
+            "tag": "#bd_capture img"
+        },
+        "videos":{
+            "method": "select",
+            "tag": "#videojs1 video"
+        },
+        "contents": 
+        {
+            "method": "select",
+            "tag": "#bd_capture div.rd_body clear div",
+            "attrs": null
+        },
+        "hits": 
+        {
+            "method": "select",
+            "tag": "div.side.fr",
+            "attrs": ["class", ["side", "fr"]]
+        }
+    }
+}

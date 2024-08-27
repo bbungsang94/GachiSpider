@@ -1,0 +1,29 @@
+{
+    "\\/bbs\\/id=free&no=\\d+":
+    {
+        "title":{
+            "method": "select",
+            "tag": "td.sbj",
+            "attrs": ["class", ["sbj"]]
+        },
+        "images":{
+            "method": "select",
+            "tag": "#userct img"
+        },
+        "videos":{
+            "method": "select",
+            "tag": "#userct video"
+        },
+        "contents": 
+        {
+            "method": "select",
+            "tag": "#userct"
+        },
+        "hits": 
+        {
+            "method": "select",
+            "tag": "td.click.bbs_ct_small",
+            "attrs": ["class", ["click", "bbs_ct_small"]]
+        }
+    }
+}
