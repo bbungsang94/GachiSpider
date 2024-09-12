@@ -53,14 +53,13 @@ def upload_zone(client, bucket_name, cache_root, **kwargs):
         else:
             upload_path = os.path.join(bucket_root, file)
             result = client.upload_file(cache_path, bucket_name, upload_path, Callback=ProgressPercentage(cache_path))
-            pass
             
 def main():
-    key = read_key_chain()
-    client = read_storages(key['ROOT'], url="https://kr.archive.ncloudstorage.com", region="kr")
-    upload_zone(client, bucket_name='creadto-archive',
-                cache_root=r"D:\Shared",
-                bucket_root="")
+    key = read_key_chain(full_path=r"D:\Creadto\GachiSpider\ncp_authorization_key\access_key-secret.json")
+    client = read_storages(key['ROOT'], url="https://kr.object.ncloudstorage.com", region="kr")
+    upload_zone(client, bucket_name='creadto-crawl-storage',
+                cache_root=r"D:\Creadto\GachiSpider\datalake\red_zone",
+                bucket_root="landed/")
     
     
 if __name__ == "__main__":
