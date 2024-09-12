@@ -24,42 +24,43 @@ class ProgressPercentage(object):
                     percentage))
             sys.stdout.flush()
 
-def read_key(full_path: str = r"D:\Shared\GachiSpider\ncp_authorization_key\access_key-secret.json"):
+def read_key_chain(full_path: str = r"D:\Shared\05.GachiSpider\ncp_authorization_key\access_key-secret.json"):
     with open(full_path, 'r') as f:
         data = json.load(f)
     return data
 
-def read_storages(key_pair):
-    url = "https://kr.object.ncloudstorage.com"
-    region = "kr-standard"
+def read_storages(key_pair, url="https://kr.object.ncloudstorage.com", region="kr-standard"):
     latest_client = None
     for key_id, secret_key in key_pair.items():
         latest_client = boto3.client("s3", endpoint_url=url,
                           aws_access_key_id=key_id,
-                          aws_secret_access_key=secret_key)
+                          aws_secret_access_key=secret_key,
+                          region_name=region)
         response = latest_client.list_buckets()
         for bucket in response.get("Buckets", []):
             print(bucket.get('Name'))
     return latest_client
-    
+
 def upload_zone(client, bucket_name, cache_root, **kwargs):
     bucket_root = kwargs['bucket_root'] if 'bucket_root' in kwargs else '' 
-    folders = os.listdir(cache_root)
-    for folder in tqdm(folders):
-        storage_path = os.path.join(bucket_root, folder) + '/'
-        client.put_object(Bucket=bucket_name, Key=storage_path)
-        files = os.listdir(os.path.join(cache_root, folder))
-        for filename in files:
-            cache_path = os.path.join(cache_root, folder, filename)
-            upload_path = os.path.join(storage_path, filename)
+    files = os.listdir(cache_root)
+    for file in files:
+        cache_path = os.path.join(cache_root, file)
+        if os.path.isdir(cache_path):
+            storage_path = os.path.join(bucket_root, file) + '/'
+            client.put_object(Bucket=bucket_name, Key=storage_path)
+            upload_zone(client, bucket_name, cache_root=cache_path, bucket_root=storage_path)
+        else:
+            upload_path = os.path.join(bucket_root, file)
             result = client.upload_file(cache_path, bucket_name, upload_path, Callback=ProgressPercentage(cache_path))
-
+            pass
+            
 def main():
-    key = read_key()
-    client = read_storages(key)
-    upload_zone(client, bucket_name='creadto-hadoop-bucket',
-                cache_root=r"D:\Creadto\GachiSpider\datalake\red_zone",
-                bucket_root="red_zone/")
+    key = read_key_chain()
+    client = read_storages(key['ROOT'], url="https://kr.archive.ncloudstorage.com", region="kr")
+    upload_zone(client, bucket_name='creadto-archive',
+                cache_root=r"D:\Shared",
+                bucket_root="")
     
     
 if __name__ == "__main__":
