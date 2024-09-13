@@ -4,7 +4,7 @@ from typing import Dict, List, Tuple
 
 
 class Matcher(Base):
-    def __init__(self, mass: str, name = "*"):
+    def __init__(self, mass: str, name = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"):
         """Robots.txt parser, Validate url with crawler's name
 
         Args:
@@ -12,7 +12,7 @@ class Matcher(Base):
             name (str, optional): Crawler name. If you have multiple names, not implemented. Defaults to "*".
         """
         super(Matcher, self).__init__(mass=mass, name=name)
-        self.bot_name = 'user-agent:' + name.lower().replace(" ", "")
+        self.bot_name = 'user-agent:' + name
         mass = mass.lower().replace(' ', '')
         search = mass.find(self.bot_name)
         if search == -1:

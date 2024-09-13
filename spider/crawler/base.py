@@ -2,7 +2,6 @@ import logging
 import requests
 from urllib.parse import urljoin
 from spider.structure import Node
-from . import __name__
 from .matcher import Matcher
 from .state import State, Fetch
 
@@ -12,9 +11,9 @@ class Crawler:
         self.init_url = init_url
         
         response = requests.get(urljoin(base=self.init_url, url='robots.txt'))
-        self.matcher = Matcher(mass=response.text, name=self.name)
+        self.matcher = Matcher(mass=response.text)
         
-        self.name = __name__
+        self.name = name
         self.state = None
         self.cache = None
         self.trajectory = set()

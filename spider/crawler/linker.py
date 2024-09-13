@@ -6,7 +6,7 @@ from urllib.parse import urljoin, urlparse
 
 from spider.structure import Node
 from spider.utils.web import get_base_url, get_unwrapped_url
-from .state import State, Fetch, Parse
+from .state import State, Fetch
 from . import Crawler
 
 class CloudLinker(Crawler):
