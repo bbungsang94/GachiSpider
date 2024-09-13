@@ -7,14 +7,12 @@ from .matcher import Matcher
 from .state import State, Fetch
 
 class Crawler:
-    def __init__(self, base_url, valid_robots=False):
-        self.logger = logging.getLogger(name="Crawler")
-        self.base_url = base_url
+    def __init__(self, init_url, valid_robots=False, name="Crawler"):
+        self.logger = logging.getLogger(name=name)
+        self.init_url = init_url
         
-        self.matcher = None
-        if valid_robots:
-            response = requests.get(urljoin(base=self.base_url, url='robots.txt'))
-            self.matcher = Matcher(mass=response.text, name=self.name)
+        response = requests.get(urljoin(base=self.init_url, url='robots.txt'))
+        self.matcher = Matcher(mass=response.text, name=self.name)
         
         self.name = __name__
         self.state = None

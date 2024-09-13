@@ -12,7 +12,7 @@ from . import __name__
 
 class BatchCrawler(Crawler):
     def __init__(self, base_url, batch_code: str = '', batch_size: int = 16):
-        super(BatchCrawler, self).__init__(base_url=base_url)
+        super(BatchCrawler, self).__init__(init_url=base_url)
         self.logger = logging.getLogger(name="BatchCrawler")
         self.nodes = None
         self.trajectory = set()
@@ -57,7 +57,7 @@ class BatchCrawler(Crawler):
             if cond1 or cond2:
                 del self.nodes[i]
             else:
-                node.url = urljoin(self.base_url, node.url)
+                node.url = urljoin(self.init_url, node.url)
                 self.nodes[i] = node
         
         self.logger.info("Found new links(%d)" % len(self.nodes))

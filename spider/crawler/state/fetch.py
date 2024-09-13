@@ -1,11 +1,11 @@
 from datetime import datetime 
-from urllib.request import Request, urlopen
 from typing import List
 from bs4 import BeautifulSoup as bs
 from spider.structure import Node
+from spider.utils.web import get_unwrapped_url
 from .base import State
 from .failed import Failed
-from .gather import Gather
+from .gather import Parse
 
 
 class Fetch(State):
@@ -14,17 +14,17 @@ class Fetch(State):
         
     def run(self):
         try:
-            req = Request(self.node.url, headers={'User-Agent': self.parent.name})
-            context = urlopen(req)
-            if context.status == 200:
-                self.node.url = context.url
+            context, url = get_unwrapped_url(self.node.url)
+            if url is not None:
+                self.node.url = url
                 soup = bs(context.read(), 'html.parser')
                 self.node.last_visited = datetime.timestamp(datetime.now())
                 self.node.cache = soup
-                self.parent.transit(Gather(node=self.node, parent=self.parent))
+                self.node.fan_out = self._get_links()
+                self.parent.transit(Parse(node=self.node, parent=self.parent))
             else:
                 self.logger.warning("Invalid connection(%d), from %s" % (context.status, self.node.url))
-                self.node.label = "Connection Blocked"
+                self.node.label = "Connection Failed"
                 raise ConnectionError
         except Exception as e:
             import traceback
@@ -36,3 +36,13 @@ class Fetch(State):
     
     def stop(self):
         raise NotImplementedError
+    
+    def _get_links(self) -> List[Node]:
+        links = self.node.cache.find_all('a')
+        nodes = []
+        for link in links:
+            href = link.get('href')
+            if href:
+                node = Node(url=href, fan_in=[self.node.url])
+                nodes.append(node)
+        return nodes

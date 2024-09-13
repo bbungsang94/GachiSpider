@@ -7,7 +7,7 @@ from .base import State
 from .parse import Parse
 from .failed import Failed
 
-
+# EXPIRED!
 class Gather(State):
     def __init__(self, node: Node, parent):
         super(Gather, self).__init__("gather", node=node, parent=parent)

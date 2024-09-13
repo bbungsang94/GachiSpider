@@ -16,7 +16,7 @@ def crawl_once(node):
 
 class Parser(Crawler):
     def __init__(self, node: Node):
-        super(Parser, self).__init__(base_url=get_base_url(node.url))
+        super(Parser, self).__init__(init_url=get_base_url(node.url))
         self.logger = logging.getLogger(name="RabbitMQ Parser")
         self.node = node
                 
