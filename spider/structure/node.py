@@ -18,6 +18,10 @@ class Node:
         return asdict(self)
     
     @classmethod
+    def get_fields(cls, begin=1):
+        return {f.name: i + begin for i, f in enumerate(fields(cls))}
+        
+    @classmethod
     def from_dict(cls, data: dict):
         field_names = {f.name for f in fields(cls)}
         filtered_data = {k: v for k, v in data.items() if k in field_names}

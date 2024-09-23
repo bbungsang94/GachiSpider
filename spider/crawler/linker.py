@@ -64,16 +64,16 @@ class CloudLinker(Crawler):
         for i, node in reversed(list(enumerate(self.node.fan_out))):
             parsed_url = urlparse(node.url)
             if parsed_url.hostname == None:
-                self.node.fan_out[i] = urljoin(base_url, node.url)
+                self.node.fan_out[i].url = urljoin(base_url, node.url)
             else:
                 del self.node.fan_out[i]
     
     def _match_database(self, nodes: List[Node]):
         collection = self.runtime_db['Trajectories']
-        existing_nodes = collection.find({"url": {"$in": self.node.fan_out}}, {"url": 1})
+        existing_nodes = collection.find({"url": {"$in": self.node.fan_out}}, Node.get_fields(begin=1))
         existing_nodes = [Node.from_dict(node) for node in existing_nodes]
         existing_set = {node.url for node in existing_nodes}
         
         new_nodes = [node for node in nodes if node.url not in existing_set]
-        collection.insert_many()
+        collection.insert_many([node.to_dict() for node in new_nodes])
         return existing_nodes + new_nodes
