@@ -1,5 +1,6 @@
 import os
 import re
+import copy
 import pickle
 from typing import List
 from urllib.parse import urlparse, urljoin
@@ -8,12 +9,43 @@ from .base import State
 from .failed import Failed
 from .succeeded import Succeeded
 
-class Store(State):
+class UpdateMongo(State):
+    def __init__(self, node: Node, parent, collection):
+        super(UpdateMongo, self).__init__("store", node=node, parent=parent)
+        self.collection = collection
+        
+    def run(self):
+        try:
+            result = self._store_node()
+            self.parent.transit(Succeeded(node=self.node, parent=self.parent))
+            if result.modified_count == 0:
+                raise ValueError
+        except:
+            self.parent.transit(Failed(node=self.node, parent=self.parent))
+            
+    def pause(self):
+        raise NotImplementedError
+    
+    def stop(self):
+        raise NotImplementedError
+    
+    def _store_node(self):
+        nodes = copy.deepcopy(self.node.fan_out)
+        self.node.fan_out = [x.url for x in nodes]
+        self.node.cache = None
+        
+        query = {'url': self.node.url}      
+        contents = {"$set": self.node.to_dict()}
+        result = self.collection.update_one(query, contents)
+        return result
+    
+      
+class StoreLocal(State):
     def __init__(self, node: Node, parent, root='./datalake/red_zone'):
-        super(Store, self).__init__("store", node=node, parent=parent)
+        super(StoreLocal, self).__init__("store", node=node, parent=parent)
         if not os.path.exists(root):
             self.logger.warning("Not found root directory, Made temp directory to : %s" % root)
-            os.mkdir(root)
+            os.makedirs(root)
         self.root = root
         
     def run(self):

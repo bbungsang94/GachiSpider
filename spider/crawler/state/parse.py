@@ -7,7 +7,7 @@ from urllib.parse import urlparse, urljoin
 
 from spider.structure import Node
 from .base import State
-from .store import Store
+from .store import StoreLocal
 from .failed import Failed
 
 class Parse(State):
@@ -20,7 +20,7 @@ class Parse(State):
     def run(self):
         try:
             self.node.data = self._parse()
-            self.parent.transit(Store(node=self.node, parent=self.parent))
+            self.parent.transit(StoreLocal(node=self.node, parent=self.parent))
         except Exception as e:
             import traceback
             self.logger.error(traceback.print_exc())

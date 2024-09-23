@@ -14,16 +14,20 @@ class Fetch(State):
         
     def run(self):
         try:
-            context, url = get_unwrapped_url(self.node.url)
+            if self.node.cache is None:
+                contents, url = get_unwrapped_url(self.node.url)
+            else:
+                contents, url = self.node.cache, self.node.url
+                
             if url is not None:
                 self.node.url = url
-                soup = bs(context.read(), 'html.parser')
+                soup = bs(contents, 'html.parser')
                 self.node.last_visited = datetime.timestamp(datetime.now())
                 self.node.cache = soup
                 self.node.fan_out = self._get_links()
                 self.parent.transit(Parse(node=self.node, parent=self.parent))
             else:
-                self.logger.warning("Invalid connection(%d), from %s" % (context.status, self.node.url))
+                self.logger.warning("Invalid connection, from %s" % (self.node.url))
                 self.node.label = "Connection Failed"
                 raise ConnectionError
         except Exception as e:

@@ -51,12 +51,13 @@ class CloudLinker(Crawler):
     
     def _check_sanity(self, nodes: List[Node]) -> List[Node]:
         for i, node in enumerate(nodes):
-            context, url = get_unwrapped_url(node.url)
+            contents, url = get_unwrapped_url(node.url)
             if url is not None:
                 nodes[i].url = url
-                nodes[i].cache = context
+                nodes[i].cache = contents
             else:
-                nodes[i].label = "Connection Failed"
+                self.logger.info("Unwrap failed url: %s" % (node.url))
+                nodes[i].label = "Unwrap Failed"
         return nodes
     
     def _extract_links(self):

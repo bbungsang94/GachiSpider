@@ -14,7 +14,6 @@ class Node:
     fan_out: List[object] = None
     
     def to_dict(self):
-        self.cache = None
         return asdict(self)
     
     @classmethod
