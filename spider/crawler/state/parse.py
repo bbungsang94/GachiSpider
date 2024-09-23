@@ -2,7 +2,6 @@ import re
 import json
 import json
 import os.path as osp
-from typing import List
 from urllib.parse import urlparse, urljoin
 
 from spider.structure import Node
@@ -70,6 +69,11 @@ class Parse(State):
                         cond = attrs[0] in stub.attrs and stub.attrs[attrs[0]] == attrs[1]
                     if cond is False:
                         del result[i]
-            gathered[tag] = [{'text': stub.get_text(), 'attrs': stub.attrs} for stub in result]
+            
+            if 'html' in value and value['html']:
+                gathered[tag] = [{'text': stub.prettify(), 'attrs': None} for stub in result]
+            else:
+                gathered[tag] = [{'text': stub.get_text(), 'attrs': stub.attrs} for stub in result]
 
         return gathered
+    

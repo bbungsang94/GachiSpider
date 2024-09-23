@@ -24,6 +24,12 @@
         {
             "method": "select",
             "tag": "#board_read div.user_info"
+        },
+        "html":
+        {
+            "method": "select",
+            "tag": "div.board_main_view",
+            "html": true
         }
     }
 }
