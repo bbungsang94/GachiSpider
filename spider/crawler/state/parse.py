@@ -19,7 +19,7 @@ class Parse(State):
     def run(self):
         try:
             self.node.data = self._parse()
-            self.parent.transit(StoreLocal(node=self.node, parent=self.parent))
+            self.parent.transit(StoreLocal(node=self.node, parent=self.parent, root='/tmp/datalake/red_zone'))
         except Exception as e:
             import traceback
             self.logger.error(traceback.print_exc())
