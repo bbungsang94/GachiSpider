@@ -25,6 +25,12 @@
             "method": "select",
             "tag": "#containerInner div.writerInfoContents",
             "attrs": null
+        },
+        "html":
+        {
+            "method": "select",
+            "tag": "div.viewContent",
+            "html": true
         }
     }
 }

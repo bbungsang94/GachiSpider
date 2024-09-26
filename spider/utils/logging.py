@@ -6,7 +6,7 @@ import logging.handlers
 import re
 
 
-def init_logging(level, file_path="app.log"):
+def init_logging(level, file_path="app.log", dir_path="./logs"):
     root_logger = logging.getLogger()
     root_logger.setLevel(level)
 
@@ -18,9 +18,9 @@ def init_logging(level, file_path="app.log"):
     console_handler.setFormatter(colored_formatter)
     root_logger.addHandler(console_handler)
 
-    file_path = os.path.join("./logs", file_path)
-    if os.path.isdir("./logs") == False:
-        os.mkdir("./logs")
+    file_path = os.path.join(dir_path, file_path)
+    if os.path.isdir(dir_path) == False:
+        os.mkdir(dir_path)
     file_handler = logging.FileHandler(file_path)
     file_level = "DEBUG"
     file_handler.setLevel(file_level)

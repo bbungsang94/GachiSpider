@@ -23,6 +23,12 @@
         {
             "method": "select",
             "tag": "#container div.text_left"
+        },
+        "html":
+        {
+            "method": "select",
+            "tag": "div.view_context",
+            "html": true
         }
     }
 }

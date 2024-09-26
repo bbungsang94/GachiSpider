@@ -1,10 +1,12 @@
 import time
+import logging
 import threading
 from typing import Dict
 
 
-class Scheduler:
-    def __init__(self, period=0.3):
+class Engine:
+    def __init__(self, period=0.3, name="engine"):
+        self.logger = logging.getLogger(name=name)
         self.active = False
         self.period = period
         self._main_events = dict()
@@ -18,8 +20,9 @@ class Scheduler:
         if self.active == False:
             return result
         
-        for name, event in self._main_events.items():
-            result[name] = event()
+        for name, pair in self._main_events.items():
+            event, kwargs = pair
+            result[name] = event(**kwargs)
         return result
     
     def fixed_update(self):
@@ -28,8 +31,9 @@ class Scheduler:
         if self.active == False:
             return
         
-        for name, event in self._fixed_events.items():
-            result[name] = event()
+        for name, pair in self._fixed_events.items():
+            event, kwargs = pair
+            result[name] = event(**kwargs)
         self.fixed_results.append(result)
         if time.time() - begin > self.period:
             self.period = time.time() - begin
@@ -46,15 +50,15 @@ class Scheduler:
         self.timer.cancel()
         return dict()
     
-    def add_event(self, event, name):
+    def add_event(self, event, name, **kwargs):
         if name in self._main_events or name in self._fixed_events:
             return None
-        self._main_events[name] = event
+        self._main_events[name] = (event, kwargs)
         
-    def add_fixed_event(self, event, name):
+    def add_fixed_event(self, event, name, **kwargs):
         if name in self._main_events or name in self._fixed_events:
             return None
-        self._fixed_events[name] = event
+        self._fixed_events[name] = (event, kwargs)
     
     def del_event(self, name):
         if name in self._main_events:

@@ -14,12 +14,13 @@ class Parse(State):
         super(Parse, self).__init__("parse", node=node, parent=parent)
         self.form = self._get_form()
         if self.form is None:
+            self.node.label = "Not found correct form"
             self.parent.transit(Failed(node=self.node, parent=self.parent))
         
     def run(self):
         try:
             self.node.data = self._parse()
-            self.parent.transit(StoreLocal(node=self.node, parent=self.parent))
+            self.parent.transit(StoreLocal(node=self.node, parent=self.parent, root='/tmp/datalake/red_zone'))
         except Exception as e:
             import traceback
             self.logger.error(traceback.print_exc())
