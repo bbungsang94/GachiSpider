@@ -25,6 +25,12 @@
             "method": "select",
             "tag": "div.topTitle-box li",
             "attrs": null
+        },
+        "html":
+        {
+            "method": "select",
+            "tag": "table.pic_bg td.han",
+            "html": true
         }
     }
 }

@@ -25,6 +25,12 @@
             "method": "select",
             "tag": "#tbArticle div.articleHit",
             "attrs": ["class", ["articleHit"]]
+        },
+        "html":
+        {
+            "method": "select",
+            "tag": "div.contentBody",
+            "html": true
         }
     }
 }

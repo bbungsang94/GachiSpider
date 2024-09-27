@@ -21,9 +21,8 @@ class Fetch(State):
                 
             if url is not None:
                 self.node.url = url
-                soup = bs(contents, 'html.parser')
                 self.node.last_visited = datetime.timestamp(datetime.now())
-                self.node.cache = soup
+                self.node.cache = contents
                 self.node.fan_out = self._get_links()
                 self.parent.transit(Parse(node=self.node, parent=self.parent))
             else:
@@ -42,7 +41,8 @@ class Fetch(State):
         raise NotImplementedError
     
     def _get_links(self) -> List[Node]:
-        links = self.node.cache.find_all('a')
+        soup = bs(self.node.cache, 'html.parser')
+        links = soup.find_all('a')
         nodes = []
         for link in links:
             href = link.get('href')

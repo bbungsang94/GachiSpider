@@ -1,5 +1,7 @@
 import json
 import boto3
+
+from spider.crawler.base import LambdaCrawler
 from .engine import Engine
 
 class LambdaScheduler:
@@ -8,12 +10,13 @@ class LambdaScheduler:
         self.db_ip, self.db_port = db_ip, db_port
     
     def parse(self, url):
-        self.engine.add_event(self._invoke, "lambda-crawl",
-                              url=url, db_ip=self.db_ip, db_port=self.db_port)
-        self.engine.run()
-        pass
+        return self._invoke_local(db_ip=self.db_ip, db_port=self.db_port, url=url)
     
-    def _invoke(**kwargs):
+    def _invoke_local(self, db_ip, db_port, url):
+        crawler = LambdaCrawler(db_ip=db_ip, db_port=db_port)
+        crawler.crawl(url=url)
+
+    def _invoke(self, **kwargs):
         # Lambda 클라이언트 생성
         lambda_client = boto3.client('lambda', region_name='ap-northeast-2')  # 예: 'us-east-1'
 
@@ -30,11 +33,10 @@ class LambdaScheduler:
             
             # 응답 처리
             response_payload = json.loads(response['Payload'].read())
-            if response_payload['statusCode'] == 200:
-                print(f"Lambda Function Success: {response_payload['body']}")
-                print(f"File saved at: {response_payload['file_path']}")
+            if response_payload['statusCode'] == 400:
+                print(f"Lambda Function Success")
             else:
-                print(f"Lambda Function Error: {response_payload['body']}")
+                print(f"Lambda Function Error")
         
         except Exception as e:
             print(f"Error invoking Lambda function: {str(e)}")

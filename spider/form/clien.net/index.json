@@ -19,6 +19,11 @@
           "method": "select",
           "tag": "#div_content div.view_info strong",
           "attrs": null
+        },
+        "html": {
+          "method": "select",
+          "tag": "div.post_content",
+          "html": true
         }
     }
 }

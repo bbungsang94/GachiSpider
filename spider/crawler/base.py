@@ -64,6 +64,11 @@ class LambdaCrawler(Crawler):
     def transit(self, next_state: State, auto_run: bool = True):
         self.state = next_state
         if next_state.name == "store":
-            self.state = UpdateMongo(node=next_state.node, parent=self, collection=self.runtime_db['Trajectories'])         
+            self.state = UpdateMongo(node=next_state.node, parent=self,
+                                     collection=self.runtime_db['Trajectories'])         
+        elif next_state.name == "failed":
+            self.state = UpdateMongo(node=next_state.node, parent=self,
+                                     collection=self.runtime_db['Trajectories'],
+                                     leaf=True, label_pass=True)
         if auto_run:
             self.state.run()

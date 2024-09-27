@@ -24,6 +24,12 @@
             "method": "select",
             "tag": "td.click.bbs_ct_small",
             "attrs": ["class", ["click", "bbs_ct_small"]]
+        },
+        "html":
+        {
+            "method": "select",
+            "tag": "#userct",
+            "html": true
         }
     }
 }

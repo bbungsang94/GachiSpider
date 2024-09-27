@@ -22,6 +22,12 @@
             "method": "select",
             "tag": "em.txtType",
             "attrs": ["class", ["txtType"]]
+        },
+        "html":
+        {
+            "method": "select",
+            "tag": "div.bodyCont",
+            "html": true
         }
     }
 }

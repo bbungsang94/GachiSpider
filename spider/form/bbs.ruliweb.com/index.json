@@ -28,7 +28,7 @@
         "html":
         {
             "method": "select",
-            "tag": "div.board_main_view",
+            "tag": "div.view_content.autolink",
             "html": true
         }
     }

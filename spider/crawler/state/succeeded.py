@@ -4,7 +4,7 @@ from spider.structure import Node
 
 class Succeeded(State):
     def __init__(self, node: Node, parent):
-        super(Succeeded, self).__init__("succeeded", node=node, parent=parent)
+        super(Succeeded, self).__init__("succeeded", node=node, parent=parent, label_pass=True)
         
     def run(self):
         pass

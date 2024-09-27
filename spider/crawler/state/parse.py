@@ -3,7 +3,7 @@ import json
 import json
 import os.path as osp
 from urllib.parse import urlparse, urljoin
-
+from bs4 import BeautifulSoup as bs
 from spider.structure import Node
 from .base import State
 from .store import StoreLocal
@@ -23,6 +23,7 @@ class Parse(State):
             self.parent.transit(StoreLocal(node=self.node, parent=self.parent, root='/tmp/datalake/red_zone'))
         except Exception as e:
             import traceback
+            self.node.label = "Not found correct form"
             self.logger.error(traceback.print_exc())
             self.parent.transit(Failed(node=self.node, parent=self.parent))
             
@@ -55,9 +56,10 @@ class Parse(State):
     
     def _parse(self):
         gathered = dict()
+        soup = bs(self.node.cache, 'html.parser')
         for tag, value in self.form.items():
             self.logger.info(tag)
-            result = getattr(self.node.cache, value['method'])(value['tag'])
+            result = getattr(soup, value['method'])(value['tag'])
             for i in range(len(result)):
                 self.logger.debug(result[i])
             

@@ -10,18 +10,22 @@ from .failed import Failed
 from .succeeded import Succeeded
 
 class UpdateMongo(State):
-    def __init__(self, node: Node, parent, collection):
-        super(UpdateMongo, self).__init__("store", node=node, parent=parent)
+    def __init__(self, node: Node, parent, collection, label_pass=False, leaf=False):
+        super(UpdateMongo, self).__init__("store", node=node, parent=parent, label_pass=label_pass)
+        self.leaf = leaf
         self.collection = collection
         
     def run(self):
         try:
             result = self._store_node()
-            self.parent.transit(Succeeded(node=self.node, parent=self.parent))
+            if not self.leaf:
+                self.parent.transit(Succeeded(node=self.node, parent=self.parent))
             if result.modified_count == 0:
                 raise ValueError
         except:
-            self.parent.transit(Failed(node=self.node, parent=self.parent))
+            self.node.label = "DB update failed"
+            if not self.leaf:
+                self.parent.transit(Failed(node=self.node, parent=self.parent))
             
     def pause(self):
         raise NotImplementedError
@@ -31,8 +35,10 @@ class UpdateMongo(State):
     
     def _store_node(self):
         nodes = copy.deepcopy(self.node.fan_out)
-        self.node.fan_out = [x.url for x in nodes]
-        self.node.cache = None
+        if len(nodes) > 0 and isinstance(nodes[0], Node):
+            self.node.fan_out = [x.url for x in nodes]
+        if not self.leaf:
+            self.node.cache = None
         
         query = {'url': self.node.url}      
         contents = {"$set": self.node.to_dict()}
