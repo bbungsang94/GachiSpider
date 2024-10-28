@@ -11,7 +11,7 @@
         },
         "videos":{
             "method": "select",
-            "tag": "#container div.ar_txt video"
+            "tag": "#container div.ar_txt source"
         },
         "contents": 
         {

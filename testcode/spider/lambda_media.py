@@ -2,7 +2,7 @@ import logging
 from spider.crawler.base import LambdaCrawler
 from spider.utils.logging import init_logging
 
-def main():
+def main():   
     init_logging(logging.DEBUG, "crawler-test-using-lambda.log")      
     db_ip, db_port = "110.165.19.253", 27017
     crawler = LambdaCrawler(db_ip=db_ip, db_port=db_port)

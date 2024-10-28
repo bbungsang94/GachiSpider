@@ -163,3 +163,4 @@ cython_debug/
 /datalake
 /spider/crawler/lambda packages
 /ncp_authorization_key
+/credential

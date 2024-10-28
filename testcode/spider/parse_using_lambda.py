@@ -19,7 +19,7 @@ def get_null_labels(db_ip="localhost", db_port=27017):
     server_info = client.server_info()
     runtime_db = client['RuntimeDB']
     collection = runtime_db['Trajectories']
-    existing_nodes = collection.find({"url": {"$regex": "https://bbs.ruliweb.com/"}}, Node.get_fields(begin=1))
+    existing_nodes = collection.find({"url": {"$regex": "https://mlbpark.donga.com/"}}, Node.get_fields(begin=1))
     existing_nodes = [Node.from_dict(node) for node in existing_nodes]
     eliminate_duplicated_data(existing_nodes, collection)
     return existing_nodes
