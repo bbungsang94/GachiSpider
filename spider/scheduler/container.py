@@ -63,9 +63,10 @@ class Scheduler:
     
     def run(self):
         self.logger.info("Run a cycle")
+        db_ip, db_port = self.db_handle.database.client.address # raise RuntimeError if not MongoDBClient
         for node in self.documents:
             if node.freshness == 1:
-                self._request_to("manager", url=node.url)
+                self._request_to("manager", url=node.url, db_ip=db_ip, db_port=db_port)
         
         self.logger.info("Scan freshness after processing")
         self._scan_freshness(list(self.roots.keys()))

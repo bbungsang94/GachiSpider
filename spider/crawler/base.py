@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from urllib.parse import urljoin
 from spider.structure import Node
 from .matcher import Matcher
-from .state import State, Fetch, UpdateMongo
+from spider.manager.state import State, Fetch, UpdateMongo
 
 class Crawler:
     def __init__(self, init_url, valid_robots=False, name="Crawler"):

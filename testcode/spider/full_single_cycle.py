@@ -26,7 +26,7 @@ def get_db_client(db_ip, db_port):
 
 def main():
     config_root = "./spider/configs"
-    credential_root = "./credentail/aws_authorization_key"
+    credential_root = "./credential/aws_authorization_key"
     lambda_credential = get_configs(credential_root, "iam.json")['lambda']
     scheduler_config = get_configs(config_root, "scheduler.json")
     scheduler_config.update({"credential": lambda_credential})

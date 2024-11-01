@@ -5,7 +5,7 @@ from typing import List
 import requests
 from bs4 import BeautifulSoup as bs
 from spider.structure import Node
-from .state import State, Fetch, Parse
+from spider.manager.state import State, Fetch, Parse
 from . import Crawler
 from . import __name__
 

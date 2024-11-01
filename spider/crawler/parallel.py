@@ -3,7 +3,7 @@ from celery import Celery
 from spider.structure import Node
 from spider.utils.web import get_base_url
 from . import Crawler
-from .state import State, Gather, Failed
+from spider.manager.state import State, Gather, Failed
 
 app = Celery('crawls', broker='amqp://bbungsang94:151212kyhASH@localhost:5672//')
  
