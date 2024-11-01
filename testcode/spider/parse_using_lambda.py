@@ -2,7 +2,7 @@ import logging
 
 from pymongo import MongoClient
 from spider.structure import Node
-from spider.scheduler.local import LambdaScheduler
+from spider.scheduler.event import LambdaScheduler
 from spider.utils.logging import init_logging
 
 def main():

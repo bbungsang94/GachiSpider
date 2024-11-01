@@ -4,7 +4,7 @@ from typing import Dict, List
 @dataclass
 class Node:
     url: str
-    freshness: int = 0
+    freshness: float = 0
     last_visited: float = None
     cache: object = None
     label: str = None

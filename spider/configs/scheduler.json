@@ -1,0 +1,15 @@
+{
+    "Freshness":{
+        "platform": "MongoDB"
+    },
+    "Trajectory":{
+        "max_length": 100
+    },
+    "LifeCycle":{
+        "timeout": 300,
+        "ip_check": true
+    },
+    "Log":{
+        "platform": "filesystem"
+    }
+}

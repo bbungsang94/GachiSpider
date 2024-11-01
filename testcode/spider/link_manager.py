@@ -1,5 +1,5 @@
 import logging
-from spider.crawler.linker import CloudLinker
+from spider.manager.linker import CloudLinker
 from spider.utils.logging import init_logging
 
 def main():

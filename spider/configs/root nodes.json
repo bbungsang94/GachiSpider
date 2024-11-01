@@ -1,0 +1,67 @@
+{
+    "https://aagag.com/mirror/?time=24&site=82cook|bobae|clien|damoang|ddanzi|etoland|fmkorea|humor|inven|mlbpark|ou|ppomppu|ruli|slrclub&select=multi":{
+        "region": "universal",
+        "kind": "bulletin",
+        "period": 24
+    },
+    "https://news.naver.com/section/100":{
+        "region": "korea",
+        "kind": "news",
+        "subtitle": "politics",
+        "period": 12
+    },
+    "https://news.naver.com/section/101":{
+        "region": "korea",
+        "kind": "news",
+        "subtitle": "economics",
+        "period": 12
+    },
+    "https://news.naver.com/section/102":{
+        "region": "korea",
+        "kind": "news",
+        "subtitle": "society",
+        "period": 12
+    },
+    "https://news.naver.com/section/105":{
+        "region": "korea",
+        "kind": "news",
+        "subtitle": "science",
+        "period": 12
+    },
+    "https://www.hankookchon.com/local1":{
+        "region": "singapore",
+        "kind": "real_estate",
+        "subtitle": "broker",
+        "period": 48
+    },
+    "https://www.hankookchon.com/local2":{
+        "region": "singapore",
+        "kind": "real_estate",
+        "subtitle": "user",
+        "period": 48
+    },
+    "https://www.hankookchon.com/mkt?s1=676":{
+        "region": "singapore",
+        "kind": "flea_market",
+        "subtitle": "sell",
+        "period": 48
+    },
+    "https://www.hankookchon.com/mkt?s1=675":{
+        "region": "singapore",
+        "kind": "flea_market",
+        "subtitle": "buy",
+        "period": 48
+    },
+    "https://www.hankookchon.com/job_b":{
+        "region": "singapore",
+        "kind": "jobs",
+        "subtitle": "job opening",
+        "period": 240
+    },
+    "https://www.hankookchon.com/job_m":{
+        "region": "singapore",
+        "kind": "jobs",
+        "subtitle": "job search",
+        "period": 240
+    }
+}
