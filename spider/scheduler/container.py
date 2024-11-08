@@ -43,7 +43,9 @@ class Scheduler:
         self.logger.info("Request to %s" % (platform))
         
         kwargs = self.config['credential'][platform]
-        self.link_manager.invoke(**kwargs, Payload=json.dumps(payload))
+        response = self.link_manager.invoke(**kwargs, Payload=json.dumps(payload))
+        payload = json.loads(response['Payload'].read())
+        return payload
     
     def _scan_freshness(self, links: List[str]) -> List[Node]:
         exists = self.db_handle.find({"url": {"$in": links}})
@@ -54,6 +56,9 @@ class Scheduler:
             node.freshness = self.__adjust_freshness(node.last_visited, properties['period'])
             nodes.append(node)
         return nodes
+    
+    def _replace_public_ip(self):
+        pass
     
     def _set_depth(self):
         pass
@@ -66,7 +71,10 @@ class Scheduler:
         db_ip, db_port = self.db_handle.database.client.address # raise RuntimeError if not MongoDBClient
         for node in self.documents:
             if node.freshness == 1:
-                self._request_to("manager", url=node.url, db_ip=db_ip, db_port=db_port)
+                response = self._request_to("manager", url=node.url, db_ip=db_ip, db_port=db_port)
+                self.logger.info(response['statusCode'])
+                if response['statusCode'] == 501:
+                    self._replace_public_ip()
         
         self.logger.info("Scan freshness after processing")
         self._scan_freshness(list(self.roots.keys()))

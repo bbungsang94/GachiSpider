@@ -16,10 +16,14 @@ class CloudLinker(Crawler):
         self.logger.info("Initialize LinkManager as Cloud Linker")
         self.node = Node(url=init_url)
         self.logger.info("Try to connect runtime db")
-        client = MongoClient(host=db_ip, port=db_port)
-        self.logger.info("Mongo Client: {0}".format(client))
-        server_info = client.server_info()
-        self.logger.info("Server Information: {0}".format(server_info))
+        try:
+            client = MongoClient(host=db_ip, port=db_port)
+            self.logger.info("Mongo Client: {0}".format(client))
+            server_info = client.server_info()
+            self.logger.info("Server Information: {0}".format(server_info))
+        except Exception as e:
+            self.logger.error("Failed DB connection")
+            return None
         self.runtime_db = client['RuntimeDB']
         self.alternatives = None
         
@@ -28,6 +32,13 @@ class CloudLinker(Crawler):
         self.logger.info("Fetch url: %s" % (self.node.url))
         state = Fetch(node=self.node, parent=self)
         state.run()
+        
+        if self.node.label == "Connection Failed":
+            self.logger.info("You should replace public IP")
+            return {
+                'statusCode': 501,
+                'message': "Replace IP"
+                }
         self._extract_links()
         
         self.logger.info("Unwrap redirected URLs with Check available site")
@@ -44,7 +55,10 @@ class CloudLinker(Crawler):
         self.logger.info("Validate robots")
         allow, reason = self.matcher.allow_by(url=self.alternatives[0].url)
         
-        return self.alternatives[0].url
+        return {
+            'statusCode': 200,
+            'message': "Succeeded"
+            }
     
     def transit(self, next_state: State, auto_run: bool = True):          
         self.node = next_state.node

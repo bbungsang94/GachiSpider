@@ -28,7 +28,7 @@ class Fetch(State):
             else:
                 self.logger.warning("Invalid connection, from %s" % (self.node.url))
                 self.node.label = "Connection Failed"
-                raise ConnectionError
+                self.parent.transit(Failed(node=self.node, parent=self.parent))
         except Exception as e:
             import traceback
             self.logger.error(traceback.print_exc())
