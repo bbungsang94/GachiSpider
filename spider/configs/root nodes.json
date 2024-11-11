@@ -1,4 +1,9 @@
 {
+    "https://www.bobaedream.co.kr/list?code=best":{
+        "region": "universal",
+        "kind": "bulletin",
+        "period": 8
+    },
     "https://aagag.com/mirror/?orderby=hit&site=bobae|inven|ruli|mlbpark|ppomppu&time=12&select=multi":{
         "region": "universal",
         "kind": "bulletin",
