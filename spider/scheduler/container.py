@@ -66,12 +66,11 @@ class Scheduler:
     def _dispatch_crawler(self, handle):
         pass
     
-    def run(self):
+    def run(self, **kwargs):
         self.logger.info("Run a cycle")
-        db_ip, db_port = self.db_handle.database.client.address # raise RuntimeError if not MongoDBClient
         for node in self.documents:
             if node.freshness == 1:
-                response = self._request_to("manager", url=node.url, db_ip=db_ip, db_port=db_port)
+                response = self._request_to("manager", url=node.url, **kwargs)
                 self.logger.info(response['statusCode'])
                 if response['statusCode'] == 501:
                     self._replace_public_ip()
