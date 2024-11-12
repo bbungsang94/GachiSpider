@@ -24,7 +24,7 @@ class CloudLinker(Crawler):
         except Exception as e:
             self.logger.error("Failed DB connection")
             return None
-        self.runtime_db = client['RuntimeDB']
+        self.runtime_db = client['Pages']
         self.alternatives = None
         
     def crawl(self, url):
@@ -84,7 +84,7 @@ class CloudLinker(Crawler):
                 del self.node.fan_out[i]
     
     def _match_database(self, nodes: List[Node]):
-        collection = self.runtime_db['Trajectories']
+        collection = self.runtime_db['Nodes']
         existing_nodes = collection.find({"url": {"$in": self.node.fan_out}}, Node.get_fields(begin=1))
         existing_nodes = [Node.from_dict(node) for node in existing_nodes]
         existing_set = {node.url for node in existing_nodes}

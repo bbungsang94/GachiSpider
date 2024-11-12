@@ -15,8 +15,10 @@ class Fetch(State):
     def run(self):
         try:
             if self.node.cache is None:
+                self.logger.info("New connection, Unwrap URL")
                 contents, url = get_unwrapped_url(self.node.url)
             else:
+                self.logger.info("Existed connection,  URL")
                 contents, url = self.node.cache, self.node.url
                 
             if url is not None:

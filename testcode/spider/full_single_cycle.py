@@ -20,11 +20,11 @@ def get_logger():
     init_logging(logging.INFO, "batch_test.log")
     return logging.getLogger("Base")
 
-def get_db_client(config):
-    config['database'] = get_secret(**config)
-    client = MongoClient(config['database']['uri'])
+def get_db_client(**kwargs):
+    client = MongoClient(**kwargs)
     runtime_db = client['Pages']
     collection = runtime_db['Nodes']
+    
     return collection
 
 def get_secret(name, region, pem, key, **kwargs):
@@ -66,6 +66,7 @@ def main():
     credential_root = "./credential/aws_authorization_key"
     lambda_credential = get_configs(credential_root, "iam.json")['lambda']
     db_credential = get_configs(credential_root, "iam.json")['document-db']
+    db_config = get_secret(**db_credential)
     scheduler_config = get_configs(config_root, "scheduler.json")
     scheduler_config.update({"credential": lambda_credential})
     root_nodes = get_configs(config_root, "root nodes.json")
@@ -75,9 +76,9 @@ def main():
     )
     link_manager_client = boto3.client(lambda_credential['name'], **lambda_credential['key'], config=boto_config)  
     scheduler = Scheduler(config=scheduler_config, roots=root_nodes, logger=get_logger(),
-                          db_handle=get_db_client(db_credential),
+                          db_handle=get_db_client(host=db_config['uri']), 
                           link_manager=link_manager_client)
-    scheduler.run()
+    scheduler.run(db_ip=db_config["uri"], db_port=None)
     
 if __name__ == "__main__":
     print(os.getcwd())
