@@ -53,7 +53,8 @@ class CloudLinker(Crawler):
         self.alternatives.sort(key=lambda node: node.freshness, reverse=True)
         
         self.logger.info("Validate robots")
-        allow, reason = self.matcher.allow_by(url=self.alternatives[0].url)
+        if self.matcher is not None:
+            allow, reason = self.matcher.allow_by(url=self.alternatives[0].url)
         
         return {
             'statusCode': 200,
