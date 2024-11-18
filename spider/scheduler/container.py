@@ -4,9 +4,9 @@ import json
 import time
 from typing import Dict, List
 from logging import Logger
-from spider.manager.state import UpdateMongo
 from spider.structure import DocumentDB, Node
 from spider.utils.math import clamp
+from spider.utils.mongo import sync_database
 
 class Scheduler:
     def __new__(cls, *args, **kwargs):
@@ -44,25 +44,32 @@ class Scheduler:
         payload = json.loads(response['Payload'].read())
         return payload
     
-    def _scan_freshness(self, links: List[str]) -> List[Node]:
-        new_links = copy.deepcopy(self.roots)
-        exists = self.db_handle.find({"url": {"$in": links}})
-        nodes = []
-        for node in exists:
-            node = Node.from_dict(node)
+    def _scan_freshness(self, links: List[object]) -> List[Node]:
+        if isinstance(link, list[Node]):
+            nodes = links
+        else:
+            new_links = copy.deepcopy(self.roots)
+            exists = self.db_handle.find({"url": {"$in": links}})
+            exist_nodes = []
+            for node in exists:
+                node = Node.from_dict(node)
+                del new_links[node.url]
+                node.label = "Root"
+                exist_nodes.append(node)
+        
+            new_nodes = []
+            for link in new_links.keys():
+                new_nodes.append(Node(url=link, freshness=1, label="Root"))
+        
+            if len(new_nodes) > 0:
+                self.db_handle.insert_many([node.to_dict() for node in new_nodes])
+            
+            nodes = exist_nodes + new_nodes
+        
+        for i, node in enumerate(nodes):
             properties = self.roots[node.url]
-            del new_links[node.url]
-            node.freshness = self.__adjust_freshness(node.last_visited, properties['period'])
-            node.label = "Root"
-            nodes.append(node)
-        
-        new_nodes = []
-        for link in new_links.keys():
-            new_nodes.append(Node(url=link, freshness=1, label="Root"))
-        
-        if len(new_nodes) > 0:
-            self.db_handle.insert_many([node.to_dict() for node in new_nodes])
-        return nodes + new_nodes
+            nodes[i].freshness = self.__adjust_freshness(node.last_visited, properties['period'])
+        return nodes
     
     def _replace_public_ip(self):
         pass
@@ -91,8 +98,8 @@ class Scheduler:
                     
                 node.last_visited = datetime.timestamp(datetime.now())
                 node.freshness = 0
-                state = UpdateMongo(node=node, parent=self, collection=self.db_handle, label_pass=True)
-                state.run() 
+        
+        self.documents = self._scan_freshness(self.documents)        
+        self.documents = sync_database(nodes=self.documents, collection=self.db_handle)
         
         self.logger.info("Scan freshness after processing")
-        self.documents = self._scan_freshness(list(self.roots.keys()))

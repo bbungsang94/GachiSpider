@@ -4,9 +4,7 @@ from bs4 import BeautifulSoup as bs
 from spider.structure import Node, State
 from spider.utils.web import get_unwrapped_url
 from .failed import Failed
-from .succeeded import Succeeded
-from .extract import Extract
-
+from .parse import Parse
 
 
 class Fetch(State):
@@ -15,18 +13,23 @@ class Fetch(State):
         
     def run(self):
         try:
-            self.logger.info("New connection, Unwrap URL")
-            contents, url = get_unwrapped_url(self.node.url)
+            if self.node.cache:
+                self.logger.info("Existed cache,  URL")
+                contents, url = self.node.cache, self.node.url
+            else:
+                self.logger.warning("Empty cache, from %s" % (self.node.url))
+                self.node.label = "Invalid matched data"
+                self.parent.transit(Failed(node=self.node, parent=self.parent))
                 
             if url is not None:
                 self.node.url = url
                 self.node.last_visited = datetime.timestamp(datetime.now())
                 self.node.cache = contents
                 self.node.fan_out = self._get_links()
-                self.parent.transit(Extract(node=self.node, parent=self.parent))
+                self.parent.transit(Parse(node=self.node, parent=self.parent))
             else:
                 self.logger.warning("Invalid connection, from %s" % (self.node.url))
-                self.node.label = "Web Connection Failed"
+                self.node.label = "Connection Failed"
                 self.parent.transit(Failed(node=self.node, parent=self.parent))
         except Exception as e:
             import traceback

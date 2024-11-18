@@ -4,8 +4,7 @@ import json
 import os.path as osp
 from urllib.parse import urlparse, urljoin
 from bs4 import BeautifulSoup as bs
-from spider.structure import Node
-from .base import State
+from spider.structure import Node, State
 from .store import StoreLocal
 from .failed import Failed
 

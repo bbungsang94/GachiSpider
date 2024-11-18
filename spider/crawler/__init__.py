@@ -1,4 +1,4 @@
 from .base import Crawler
-from .batch import BatchCrawler
+from .container import LambdaCrawler
 
 __name__ = "creadto-bot"

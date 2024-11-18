@@ -1,11 +1,9 @@
 import os
 import re
-import copy
 import pickle
-from typing import List
 from urllib.parse import urlparse, urljoin
-from spider.structure import Node
-from .base import State
+from spider.structure import Node, State
+from spider.utils.mongo import sync_database
 from .failed import Failed
 from .succeeded import Succeeded
 
@@ -17,11 +15,9 @@ class UpdateMongo(State):
         
     def run(self):
         try:
-            result = self._store_node()
+            result = sync_database(nodes=self.node.fan_out, collection=self.collection, use_cache=False)
             if not self.leaf:
                 self.parent.transit(Succeeded(node=self.node, parent=self.parent))
-            if result.modified_count == 0:
-                raise ValueError
         except:
             self.node.label = "DB update failed"
             if not self.leaf:
@@ -33,29 +29,17 @@ class UpdateMongo(State):
     def stop(self):
         raise NotImplementedError
     
-    def _store_node(self):
-        nodes = copy.deepcopy(self.node.fan_out)
-        if len(nodes) > 0 and isinstance(nodes[0], Node):
-            self.node.fan_out = [x.url for x in nodes]
-        if not self.leaf:
-            self.node.cache = None
-        
-        query = {'url': self.node.url}      
-        contents = {"$set": self.node.to_dict()}
-        result = self.collection.update_one(query, contents)
-        return result
-    
       
 class StoreLocal(State):
     def __init__(self, node: Node, parent, root='./datalake/red_zone'):
         super(StoreLocal, self).__init__("store", node=node, parent=parent)
-        if not os.path.exists(root):
-            self.logger.warning("Not found root directory, Made temp directory to : %s" % root)
-            os.makedirs(root)
         self.root = root
         
     def run(self):
         try:
+            if not os.path.exists(self.root):
+                self.logger.warning("Not found root directory, Made temp directory to : %s" % self.root)
+                os.makedirs(self.root)
             self._store_node()
             self.parent.transit(Succeeded(node=self.node, parent=self.parent))
         except:
