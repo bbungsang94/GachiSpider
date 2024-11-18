@@ -58,7 +58,8 @@ class CloudLinker(Crawler):
         
         return {
             'statusCode': 200,
-            'message': "Succeeded"
+            'message': "Succeeded",
+            'urls': [x.url for x in self.alternatives]
             }
     
     def transit(self, next_state: State, auto_run: bool = True):          
@@ -91,5 +92,6 @@ class CloudLinker(Crawler):
         existing_set = {node.url for node in existing_nodes}
         
         new_nodes = [node for node in nodes if node.url not in existing_set]
-        collection.insert_many([node.to_dict() for node in new_nodes])
+        if len(new_nodes) > 0:
+            collection.insert_many([node.to_dict() for node in new_nodes])
         return existing_nodes + new_nodes

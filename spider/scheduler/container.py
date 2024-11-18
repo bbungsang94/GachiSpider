@@ -1,7 +1,10 @@
+import copy
+from datetime import datetime
 import json
 import time
 from typing import Dict, List
 from logging import Logger
+from spider.manager.state import UpdateMongo
 from spider.structure import DocumentDB, Node
 from spider.utils.math import clamp
 
@@ -25,15 +28,9 @@ class Scheduler:
         self.logger.info("Check root urls in DB, searching spaces are")
         self.db_handle, self.link_manager = db_handle, link_manager
         self.documents = self._scan_freshness(list(self.roots.keys()))
-        
-        links = [x.url for x in self.documents]    
-        for url in self.roots.keys():
-            if url in links:
-                exists = "true"
-            else:
-                exists = "false"
-                self.documents.append(Node(url, freshness=1))
-            self.logger.info("%s, exists: %s" % (url, exists))
+  
+        for node in self.documents:
+            self.logger.info("%s, freshness: %d" % (node.url, node.freshness))
     
     def __adjust_freshness(self, last_visited, period):
         gap_hours, _ = divmod(time.time() - last_visited, 3600)
@@ -48,14 +45,24 @@ class Scheduler:
         return payload
     
     def _scan_freshness(self, links: List[str]) -> List[Node]:
+        new_links = copy.deepcopy(self.roots)
         exists = self.db_handle.find({"url": {"$in": links}})
         nodes = []
         for node in exists:
             node = Node.from_dict(node)
             properties = self.roots[node.url]
+            del new_links[node.url]
             node.freshness = self.__adjust_freshness(node.last_visited, properties['period'])
+            node.label = "Root"
             nodes.append(node)
-        return nodes
+        
+        new_nodes = []
+        for link in new_links.keys():
+            new_nodes.append(Node(url=link, freshness=1, label="Root"))
+        
+        if len(new_nodes) > 0:
+            self.db_handle.insert_many([node.to_dict() for node in new_nodes])
+        return nodes + new_nodes
     
     def _replace_public_ip(self):
         pass
@@ -66,14 +73,26 @@ class Scheduler:
     def _dispatch_crawler(self, handle):
         pass
     
+    def transit(self, *args, **kwargs):
+        pass
+        
     def run(self, **kwargs):
         self.logger.info("Run a cycle")
         for node in self.documents:
             if node.freshness == 1:
                 response = self._request_to("manager", url=node.url, **kwargs)
-                self.logger.info(response['statusCode'])
-                if response['statusCode'] == 501:
-                    self._replace_public_ip()
+                if "errorMessage" in response:
+                    self.logger.error(response['errorMessage'])
+                if "statusCode" in response:
+                    self.logger.info(response['statusCode'])
+                    if response['statusCode'] == 501:
+                        node.label = "Root, Connection Error"
+                        self._replace_public_ip()
+                    
+                node.last_visited = datetime.timestamp(datetime.now())
+                node.freshness = 0
+                state = UpdateMongo(node=node, parent=self, collection=self.db_handle, label_pass=True)
+                state.run() 
         
         self.logger.info("Scan freshness after processing")
-        self._scan_freshness(list(self.roots.keys()))
+        self.documents = self._scan_freshness(list(self.roots.keys()))
