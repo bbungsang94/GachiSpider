@@ -164,3 +164,4 @@ cython_debug/
 /spider/crawler/lambda packages
 /ncp_authorization_key
 /credential
+/scripts/temp
