@@ -12,17 +12,24 @@ phases:
       - echo "Install latest version"
       - pip install -r requirements.txt --target ./aws/lambda/Lib --upgrade
       - pip install . --target ./aws/lambda/Lib --upgrade
-      - rm -rf "./build"
-      - rm -rf "./spider.egg-info"
-      - rm -rf ./aws/lambda/Lib/*.dist-info
-      - rm -rf ./aws/lambda/Lib/_*
+      - rm -rf ./build
+      - rm -rf ./spider.egg-info
+      - if [ -d "./aws/lambda/Lib/" ]; then rm -rf ./aws/lambda/Lib/*.dist-info; fi
+      - if [ -d "./aws/lambda/Lib/" ]; then rm -rf ./aws/lambda/Lib/_*; fi
   build:
     commands:
       - echo "Uploading lambda files to S3"
       - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlParser/
       - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlManager/
-      - zip -r ./aws/lambda/crawlParser.zip ./aws/lambda/crawlParser
-      - zip -r ./aws/lambda/crawlManager.zip ./aws/lambda/crawlManager
+      
+      - cd ./aws/lambda/crawlParser
+      - zip -r ../../crawlParser.zip ./*
+      - cd - 
+
+      - cd ./aws/lambda/crawlManager
+      - zip -r ../../crawlManager.zip ./*
+      - cd - 
+      
       - aws s3 cp ./aws/lambda/crawlParser.zip s3://creadto/lambda/crawlParser.zip
       - aws s3 cp ./aws/lambda/crawlManager.zip s3://creadto/lambda/crawlManager.zip
   post_build:
