@@ -7,16 +7,15 @@ phases:
     commands:
       - echo "Update pip"
       - pip install --upgrade pip
-  build:
+  pre_build:
     commands:
       - echo "Install latest version"
+      - pip install -r requirements.txt --target ./aws/lambda/Lib --upgrade
       - pip install . --target ./aws/lambda/Lib --upgrade
-  sweep:
-    commands:
       - rm -rf "./build"
       - rm -rf "./spider.egg-info"
-      - rm -rf "./aws/lambda/Lib/spider-1.2.dist-info"
-  post_build:
+      - rm -rf "./aws/lambda/Lib/*.dist-info"
+  build:
     commands:
       - echo "Uploading lambda files to S3"
       - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlParser/
@@ -25,3 +24,6 @@ phases:
       - zip -r ./aws/lambda/crawlManager.zip ./aws/lambda/crawlManager
       - aws s3 cp ./aws/lambda/crawlParser.zip s3://creadto/lambda/crawlParser.zip
       - aws s3 cp ./aws/lambda/crawlManager.zip s3://creadto/lambda/crawlManager.zip
+  post_build:
+    commands:
+      - echo "Post build process"
