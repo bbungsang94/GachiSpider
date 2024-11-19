@@ -14,7 +14,8 @@ phases:
       - pip install . --target ./aws/lambda/Lib --upgrade
       - rm -rf "./build"
       - rm -rf "./spider.egg-info"
-      - rm -rf "./aws/lambda/Lib/*.dist-info"
+      - rm -rf ./aws/lambda/Lib/*.dist-info
+      - rm -rf ./aws/lambda/Lib/_*
   build:
     commands:
       - echo "Uploading lambda files to S3"
