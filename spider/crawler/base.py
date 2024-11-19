@@ -1,10 +1,9 @@
 import logging
 import requests
-from pymongo import MongoClient
 from urllib.parse import urljoin
 from spider.structure import Node, State
 from spider.utils.matcher import Matcher
-from spider.manager.state import Fetch, UpdateMongo
+from .state import Fetch
 
 class Crawler:
     def __init__(self, init_url, valid_robots=False, name="Crawler"):
