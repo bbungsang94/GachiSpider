@@ -22,16 +22,18 @@ phases:
       - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlParser/
       - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlManager/
       
+      - echo "Uploading crawlParser"
       - cd ./aws/lambda/crawlParser
-      - zip -r ../../crawlParser.zip ./*
+      - zip -r ../crawlParser.zip ./*
+      - aws s3 cp ../crawlParser.zip s3://creadto/lambda/crawlParser.zip
       - cd ../../../
 
+      - echo "Uploading crawlManager"
       - cd ./aws/lambda/crawlManager
-      - zip -r ../../crawlManager.zip ./*
+      - zip -r ../crawlManager.zip ./*
+      - aws s3 cp ../crawlManager.zip s3://creadto/lambda/crawlManager.zip
       - cd ../../../
       
-      - aws s3 cp ./aws/lambda/crawlParser.zip s3://creadto/lambda/crawlParser.zip
-      - aws s3 cp ./aws/lambda/crawlManager.zip s3://creadto/lambda/crawlManager.zip
   post_build:
     commands:
       - echo "Post build process"
