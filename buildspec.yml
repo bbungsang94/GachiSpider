@@ -24,11 +24,11 @@ phases:
       
       - cd ./aws/lambda/crawlParser
       - zip -r ../../crawlParser.zip ./*
-      - cd - 
+      - cd ../../../
 
       - cd ./aws/lambda/crawlManager
       - zip -r ../../crawlManager.zip ./*
-      - cd - 
+      - cd ../../../
       
       - aws s3 cp ./aws/lambda/crawlParser.zip s3://creadto/lambda/crawlParser.zip
       - aws s3 cp ./aws/lambda/crawlManager.zip s3://creadto/lambda/crawlManager.zip
