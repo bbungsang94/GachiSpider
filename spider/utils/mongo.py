@@ -8,7 +8,7 @@ def sync_database(nodes: List[Node], collection, use_cache=True):
     urls = [x.url for x in nodes]
     
     for i, node in enumerate(nodes):
-        if len(node.fan_out) > 0 and isinstance(node.fan_out[0], Node):
+        if node.fan_out != None and isinstance(node.fan_out[0], Node):
             nodes[i].fan_out = [x.url for x in nodes]
         if use_cache == False:
             nodes[i].cache = None

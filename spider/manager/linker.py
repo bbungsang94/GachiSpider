@@ -1,4 +1,3 @@
-import copy
 import logging
 from pymongo import MongoClient
 from typing import List
@@ -25,7 +24,7 @@ class CloudLinker(Linker):
             self.collection = runtime_db['Nodes']
         except Exception as e:
             self.logger.error("Failed DB connection")
-            return None
+            self.collection = None
         self.alternatives = None
         
     def crawl(self, url):
@@ -39,16 +38,17 @@ class CloudLinker(Linker):
             self.logger.info("Eliminate URLs on Freshness after matched runtime DB")
             try:
                 self.alternatives = sync_database(self.state.node.fan_out, self.collection)
+                self.logger.info("Prioritize URLs")
+                self.alternatives.sort(key=lambda node: node.freshness, reverse=True)
+                
+                self.logger.info("Validate robots")
+                if self.matcher is not None:
+                    allow, reason = self.matcher.allow_by(url=self.alternatives[0].url)
+                
             except Exception as e:
                 self.logger.error("Failed DB Access during CRUD")
                 self.state.node.label = "CRUD Failed"
-            
-            self.logger.info("Prioritize URLs")
-            self.alternatives.sort(key=lambda node: node.freshness, reverse=True)
-            
-            self.logger.info("Validate robots")
-            if self.matcher is not None:
-                allow, reason = self.matcher.allow_by(url=self.alternatives[0].url)
+                self.alternatives = []
         
         code = get_error_code(self.state.node.label)
         return {

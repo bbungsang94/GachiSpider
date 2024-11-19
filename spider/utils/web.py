@@ -1,4 +1,5 @@
 import time
+import random
 from urllib.request import Request, urlopen
 from urllib.parse import urlparse, urljoin
 
@@ -27,7 +28,8 @@ def get_base_url(url):
     return base_url
 
 def get_unwrapped_url(url, agent_name="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"):
-    time.sleep(2.0) # for webmaster
+    factor = 2.0 + (random.random() * 2 - 1.0)
+    time.sleep(factor) # for webmaster
     req = Request(url, headers=get_default_header(**{"User-Agent": agent_name}))
     unwrapped_url = None
     try:
