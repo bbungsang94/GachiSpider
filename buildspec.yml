@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo "Update pip"
+      - pip install --upgrade pip
+  build:
+    commands:
+      - echo "Install latest version"
+      - pip install . --target ./aws/lambda/Lib --upgrade
+  sweep:
+    commands:
+      - rm -rf "./build"
+      - rm -rf "./spider.egg-info"
+      - rm -rf "./aws/lambda/Lib/spider-1.2.dist-info"
+  post_build:
+    commands:
+      - echo "Uploading lambda files to S3"
+      - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlParser/
+      - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlManager/
+      - zip -r ./aws/lambda/crawlParser.zip ./aws/lambda/crawlParser
+      - zip -r ./aws/lambda/crawlManager.zip ./aws/lambda/crawlManager
+      - aws s3 cp ./aws/lambda/crawlParser.zip s3://creadto/lambda/crawlParser.zip
+      - aws s3 cp ./aws/lambda/crawlManager.zip s3://creadto/lambda/crawlManager.zip
