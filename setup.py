@@ -1,4 +1,3 @@
-import io
 from spider import __version__
 from setuptools import find_packages, setup
 
