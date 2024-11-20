@@ -16,13 +16,3 @@ def lambda_handler(event, context):
     else:
         result_dict.update(link_manager.crawl(url=url))
     return result_dict
-
-if __name__ == "__main__":
-    import os
-    print(os.getcwd())
-    kw_event = {
-        "url": "https://aagag.com/mirror/?time=12&site=bobae|clien|humor|inven|mlbpark|ou|ppomppu|ruli&select=multi",
-        "db_ip": r"mongodb://lakemaster:zmflxh1004!@creadto-gachirok-datalake.cluster-cbtcjvjycynl.ap-northeast-2.docdb.amazonaws.com:27017/?tls=true&tlsCAFile=./credential/aws_authorization_key/creadto-gachirok-datalake-db.pem",
-        "db_port": None
-        }
-    print(lambda_handler(event=kw_event, context=None))

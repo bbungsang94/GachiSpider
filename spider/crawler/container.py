@@ -25,6 +25,7 @@ class LambdaCrawler(Crawler):
         
     def crawl(self, url):
         try:
+            self.logger.info("Find exists url, init crawling")
             existing_nodes = self.collection.find({"url": {"$in": [url]}}, Node.get_fields(begin=1))
             existing_nodes = [Node.from_dict(node) for node in existing_nodes]
             if len(existing_nodes) == 0:
@@ -42,7 +43,7 @@ class LambdaCrawler(Crawler):
             existing_nodes = self.eliminate_duplicated_data(existing_nodes, self.collection)
         existing_node = existing_nodes[-1]
         
-        if existing_node.label.lower() == "succeeded":
+        if existing_node.label.lower() == "unwrapped":
             self.state = Fetch(node=existing_node, parent=self)
             self.state.run()
             message = self.state.node.label

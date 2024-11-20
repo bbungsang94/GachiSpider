@@ -21,22 +21,5 @@ def lambda_handler(event, context):
         for url in kwargs['urls']:
             stub = {url: parser.crawl(url=url)}
             result_dict.update(stub)
-        result_dict.update({'statusCode': 201, 'message': "Unclearly Succeeded"})
+        result_dict.update({'statusCode': 201, 'message': "Unclear Succeeded"})
     return result_dict
-
-    
-if __name__ == "__main__":
-    kw_event = {
-        "root": "https://aagag.com/mirror/?orderby=hit&site=bobae|inven|ruli|mlbpark|ppomppu&time=12&select=multi",
-        "db_ip": "mongodb://lakemaster:zmflxh1004!@creadto-gachirok-datalake.cluster-cbtcjvjycynl.ap-northeast-2.docdb.amazonaws.com:27017/?ssl=true&retryWrites=false&tlsAllowInvalidCertificates=true",
-        "urls": [
-            "https://www.bobaedream.co.kr/view?code=strange&No=6349621",
-            "https://bbs.ruliweb.com/community/board/300143/read/68459669",
-            "https://bbs.ruliweb.com/community/board/300143/read/68456866",
-            "https://mlbpark.donga.com/mp/b.php?p=1&b=bullpen&id=202411180099294108&select=&query=&subselect=&subquery=&user=&site=&reply=&source=&pos=&sig=h6jLGY2Akh6RKfX2hfjXGY-gLmlq",
-            "https://bbs.ruliweb.com/community/board/300143/read/68459732",
-            "https://bbs.ruliweb.com/community/board/300143/read/68457968",
-            "https://bbs.ruliweb.com/community/board/300143/read/68457261",
-            ]
-        }
-    print(lambda_handler(event=kw_event, context=None))
