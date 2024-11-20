@@ -5,7 +5,9 @@ from spider.structure.node import Node
 
 def sync_database(nodes: List[Node], collection, use_cache=True):
     nodes = copy.deepcopy(nodes)
-    urls = [x.url for x in nodes]
+    node_dict = dict()
+    for node in nodes:
+        node_dict[node.url] = node
     
     for i, node in enumerate(nodes):
         if node.fan_out != None and isinstance(node.fan_out[0], Node):
@@ -13,11 +15,11 @@ def sync_database(nodes: List[Node], collection, use_cache=True):
         if use_cache == False:
             nodes[i].cache = None
             
-    existing_nodes = collection.find({"url": {"$in": urls}}, Node.get_fields(begin=1))
+    existing_nodes = collection.find({"url": {"$in": list(node_dict.keys())}}, Node.get_fields(begin=1))
     existing_nodes = [Node.from_dict(node) for node in existing_nodes]
     for node in existing_nodes:
         query = {'url': node.url}      
-        contents = {"$set": node.to_dict()}
+        contents = {"$set": node_dict[node.url].to_dict()}
         collection.update_one(query, contents)
     
     existing_set = {node.url for node in existing_nodes}
