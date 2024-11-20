@@ -25,7 +25,6 @@ class Fetch(State):
                 self.node.url = url
                 self.node.last_visited = datetime.timestamp(datetime.now())
                 self.node.cache = contents
-                self.node.fan_out = self._get_links()
                 self.parent.transit(Parse(node=self.node, parent=self.parent))
             else:
                 self.logger.warning("Invalid connection, from %s" % (self.node.url))
@@ -41,14 +40,3 @@ class Fetch(State):
     
     def stop(self):
         raise NotImplementedError
-    
-    def _get_links(self) -> List[Node]:
-        soup = bs(self.node.cache, 'html.parser')
-        links = soup.find_all('a')
-        nodes = []
-        for link in links:
-            href = link.get('href')
-            if href:
-                node = Node(url=href, fan_in=[self.node.url])
-                nodes.append(node)
-        return nodes

@@ -15,7 +15,7 @@ class UpdateMongo(State):
         
     def run(self):
         try:
-            result = sync_database(nodes=self.node.fan_out, collection=self.collection, use_cache=False)
+            result = sync_database(nodes=self.node, collection=self.collection, use_cache=False)
             if not self.leaf:
                 self.parent.transit(Succeeded(node=self.node, parent=self.parent))
         except:

@@ -20,11 +20,14 @@ def get_logger():
     init_logging(logging.INFO, "batch_test.log")
     return logging.getLogger("Base")
 
-def get_db_client(**kwargs):
+def get_db_client(clear_label=False, **kwargs):
     client = MongoClient(**kwargs)
     runtime_db = client['Pages']
     collection = runtime_db['Nodes']
     
+    if clear_label:
+        result = collection.delete_many({"label": None})
+        
     return collection
 
 def get_secret(name, region, pem, key, **kwargs):
@@ -76,7 +79,7 @@ def main():
     )
     link_manager_client = boto3.client(lambda_credential['name'], **lambda_credential['key'], config=boto_config)  
     scheduler = Scheduler(config=scheduler_config, roots=root_nodes, logger=get_logger(),
-                          db_handle=get_db_client(host=db_config['uri']), 
+                          db_handle=get_db_client(clear_label=True, host=db_config['uri']), 
                           link_manager=link_manager_client)
     scheduler.run(db_ip=db_config["uri"], db_port=None)
     
