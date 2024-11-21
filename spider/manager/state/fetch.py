@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup as bs
 from spider.structure import Node, State
 from spider.utils.web import get_unwrapped_url
 from .failed import Failed
-from .succeeded import Succeeded
 from .extract import Extract
 
 

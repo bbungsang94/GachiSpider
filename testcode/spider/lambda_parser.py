@@ -1,5 +1,5 @@
 import logging
-from spider.crawler.base import LambdaCrawler
+from spider.crawler import LambdaCrawler
 from spider.utils.logging import init_logging
 
 def main():

@@ -1,5 +1,5 @@
 import logging
-from spider.crawler import LambdaCrawler
+from spider.transformer import DocDBTransformer
 from spider.utils.logging import init_logging
 
 def lambda_handler(event, context):
@@ -11,11 +11,11 @@ def lambda_handler(event, context):
     for event_key, key in kw_map.items():
         kwargs[key] = event.get(event_key)
 
-    init_logging(logging.DEBUG, "parser-using-lambda.log", dir_path='/tmp/')
-    parser = LambdaCrawler(**kwargs)
+    init_logging(logging.DEBUG, "transform-to-rdb-using-lambda.log", dir_path='/tmp/')
+    transformer = DocDBTransformer(**kwargs)
     
     result_dict = kwargs
-    if parser.collection == None:
+    if transformer.alternatives == None:
         result_dict.update({'statusCode': 301, 'message': "Failed DB Connection"})
     else:
         for url in kwargs['urls']:

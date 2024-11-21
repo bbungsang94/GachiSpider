@@ -1,0 +1,16 @@
+{
+    "head":["<div id=\"partialContents\">\n", "<!-- CONTENTS -->\n"],
+    "body":{
+        "depth": 1,
+        "images": {
+            "pre": "<img src=\"",
+            "post": "\" style=\"max-width: 100%; height: auto; display: block; margin: 10px 0;\" alt=\"image\"/>\n"
+        },
+        "texts": {
+            "pre": "",
+            "post": "\n"
+        }
+    },
+    "tail":["<!-- END CONTENTS -->\n", "</div>"],
+    "depth": 0
+}

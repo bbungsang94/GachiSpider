@@ -1,7 +1,7 @@
 import json
 import boto3
 
-from spider.crawler.base import LambdaCrawler
+from spider.crawler import LambdaCrawler
 from .engine import Engine
 
 class LambdaScheduler:

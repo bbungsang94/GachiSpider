@@ -1,3 +1,4 @@
+import re
 import time
 import random
 from urllib.request import Request, urlopen
@@ -41,3 +42,20 @@ def get_unwrapped_url(url, agent_name="Mozilla/5.0 (Windows NT 10.0; Win64; x64)
     
     except Exception as e:
         return None, None
+
+def download_media(url, save_path):
+    request = Request(urljoin("https://", url), headers=get_default_header())
+    try:
+        with urlopen(request) as response:
+            if response.status != 200:
+                raise ConnectionError
+
+            with open(save_path, 'wb') as file:
+                file.write(response.read())
+        return save_path
+    except Exception as e:
+        return None
+    
+def clean_text(text):
+    # \u200b: zero-width space, \ufeff: BOM, \u2028-\u202f: line separators
+    return re.sub(r'[\u200b\ufeff\u2028-\u202f]', '', text).strip()

@@ -6,8 +6,10 @@ _ERROR_MAP = {
     "FAILED ATTACH BASE URL": 401,
     "UNWRAP FAILED": 501,
     "WEB CONNECTION FAILED": 502,
+    "DOWNLOAD FAILED": 503,
     "NOT FOUND CORRECT FORM": 601,
     "NOT FOUND URL IN DB": 602,
+    "FAILED FORMATTING": 603,
 }
 
 def get_error_code(message: str):

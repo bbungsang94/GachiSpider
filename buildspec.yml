@@ -23,6 +23,7 @@ phases:
       - echo "Uploading lambda files to S3"
       - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlParser/
       - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlManager/
+      - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlTransformer/
       
       - echo "Uploading crawlParser"
       - cd ./aws/lambda/crawlParser
@@ -34,6 +35,12 @@ phases:
       - cd ./aws/lambda/crawlManager
       - zip -r ../crawlManager.zip ./*
       - aws s3 cp ../crawlManager.zip s3://creadto/lambda/crawlManager.zip
+      - cd ../../../
+
+      - echo "Uploading crawlTransformer"
+      - cd ./aws/lambda/crawlTransformer
+      - zip -r ../crawlTransformer.zip ./*
+      - aws s3 cp ../crawlTransformer.zip s3://creadto/lambda/crawlTransformer.zip
       - cd ../../../
       
   post_build:

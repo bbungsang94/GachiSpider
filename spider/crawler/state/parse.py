@@ -5,6 +5,7 @@ import os.path as osp
 from urllib.parse import urlparse, urljoin
 from bs4 import BeautifulSoup as bs
 from spider.structure import Node, State
+from spider.utils.web import clean_text
 from .store import StoreLocal
 from .failed import Failed
 
@@ -75,7 +76,9 @@ class Parse(State):
             if 'html' in value and value['html']:
                 gathered[tag] = [{'text': stub.prettify(), 'attrs': None} for stub in result]
             else:
-                gathered[tag] = [{'text': stub.get_text(), 'attrs': stub.attrs} for stub in result]
+                text_content = stub.get_text(strip=True)  # 텍스트에서 공백 제거
+                cleaned_text = clean_text(text_content)
+                gathered[tag] = [{'text': cleaned_text, 'attrs': stub.attrs} for stub in result]
 
         return gathered
     

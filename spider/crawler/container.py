@@ -21,7 +21,7 @@ class LambdaCrawler(Crawler):
             self.collection = self.collection['Nodes']
         except Exception as e:
             self.logger.error("Failed DB connection")
-            return None
+            self.collection = None
         
     def crawl(self, url):
         try:
