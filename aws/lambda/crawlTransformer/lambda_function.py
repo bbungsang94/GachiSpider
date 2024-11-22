@@ -18,8 +18,7 @@ def lambda_handler(event, context):
     if transformer.alternatives == None:
         result_dict.update({'statusCode': 301, 'message': "Failed DB Connection"})
     else:
-        for url in kwargs['urls']:
-            stub = {url: parser.crawl(url=url)}
-            result_dict.update(stub)
+        result = transformer.run()
+        result_dict.update(result)
         result_dict.update({'statusCode': 201, 'message': "Unclear Succeeded"})
     return result_dict

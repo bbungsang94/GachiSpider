@@ -45,6 +45,4 @@ phases:
       
   post_build:
     commands:
-      - aws lambda update-function-code --function-name crawlManager --s3-bucket creadto --s3-key lambda/crawlManager.zip
-      - aws lambda update-function-code --function-name crawlParser --s3-bucket creadto --s3-key lambda/crawlParser.zip
-      - aws lambda update-function-code --function-name crawlTransformer --s3-bucket creadto --s3-key lambda/crawlTransformer.zip
+      - echo "Empty Post Build, Check Deploy Stage in Pipeline on AWS"

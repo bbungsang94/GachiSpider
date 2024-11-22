@@ -14,7 +14,7 @@ class Collect(State):
         self.bridge_directory = datetime.today().strftime("%Y/%m/%d")
         
     def run(self):
-        self.node.cache = dict()
+        self.node.cache = {'urls': [], 'tmp_paths': [], 'storage_paths': []}
         data = self.node.data
         self.logger.info("Check media files in %s" % self.node.url)     
         for key, contents in data.items():
@@ -41,10 +41,12 @@ class Collect(State):
                     try:       
                         self.logger.info("Request media source")
                         full_path = os.path.join(file_root, filename)
-                        self.node.cache[key][content['attrs']['src']] = download_media(url=content['attrs']['src'], save_path=full_path)
-                        if self.node.cache[key][content['attrs']['src']] == None:
+                        saved_path = download_media(url=content['attrs']['src'], save_path=full_path)
+                        if saved_path == None:
                             raise RuntimeError
-                        self.logger.info("Media source downloaded, saved to %s" % full_path)
+                        self.node.cache['urls'].append(content['attrs']['src'])
+                        self.node.cache['tmp_paths'].append(saved_path)
+                        self.logger.info("Media source downloaded, saved to %s" % saved_path)
                     except Exception as e:
                         self.logger.warning("Failed download file(%s) \n reason: %s" % (content['attrs']['src'], e))
                         self.node.cache[key][content['attrs']['src']] = None

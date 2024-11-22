@@ -1,10 +1,11 @@
 import json
 import os
+from typing import List
 from spider.structure import Node, State
 from bs4 import BeautifulSoup
 
 from spider.utils.web import clean_text
-from .query import Store
+from .query import Query
 from .failed import Failed
 
 
@@ -37,15 +38,25 @@ class Format(State):
         body = t_mark + sub_form['pre'] + contents + sub_form['post']
         return body
     
+    def _find_index(self, value: str, alternatives: List[str]):
+        for i, alter in enumerate(alternatives):
+            if value == alter:
+                return i
+        return None
+    
     def _make_body(self):
         data = self.node.data
         cache = self.node.cache
+        urls = cache['urls']
+        tmp_paths = cache['tmp_paths']
+        storage_paths = cache['storage_paths']
+
         html = data['html'][-1]['text']
         soup = BeautifulSoup(html, 'html.parser')
         
         for element in soup.find_all(True):
             if 'src' in element.attrs and element.attrs['src'] in cache:
-                saved_path = cache[element.attrs['src']]
+                saved_path = tmp_paths[self._find_index(element.attrs['src'], urls)]
                 if saved_path is not None:
                     self.body += self._make_element(saved_path, "images")
             
@@ -64,7 +75,7 @@ class Format(State):
         try:
             self.node.cache = self._make_body()
             self.node.label = "Transformed"
-            self.parent.transit(Store(node=self.node, parent=self.parent))
+            self.parent.transit(Query(node=self.node, parent=self.parent))
         except Exception as e:
             self.node.label = "Failed Formatting"
             self.parent.transit(Failed(node=self.node, parent=self.parent))

@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from spider.structure import State, Node
+from spider.structure import State
 from spider.transformer.base import Transformer
 from spider.utils.mongo import get_data_with, sync_database
 from .state import Collect
@@ -16,7 +16,7 @@ class DocDBTransformer(Transformer):
             self.logger.info("Server Information: {0}".format(server_info))
             self.collection = client['Pages']
             self.collection = self.collection['Nodes']
-            self.alternatives = get_data_with(label='store')
+            self.alternatives = get_data_with(self.collection, label='store')
         except Exception as e:
             self.logger.error("Failed DB connection")
             self.collection = None
