@@ -4,7 +4,7 @@ from spider.structure import Node, State
 from bs4 import BeautifulSoup
 
 from spider.utils.web import clean_text
-from .store import Store
+from .query import Store
 from .failed import Failed
 
 
@@ -63,7 +63,7 @@ class Format(State):
     def run(self):
         try:
             self.node.cache = self._make_body()
-            self.node.label = "Tranformed"
+            self.node.label = "Transformed"
             self.parent.transit(Store(node=self.node, parent=self.parent))
         except Exception as e:
             self.node.label = "Failed Formatting"

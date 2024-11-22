@@ -1,11 +1,4 @@
-import json
-import os
 from spider.structure import Node, State
-from bs4 import BeautifulSoup
-
-from spider.utils.web import clean_text
-from .failed import Failed
-
 
 class Query(State):
     def __init__(self, node: Node, parent):
