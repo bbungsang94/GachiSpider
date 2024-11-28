@@ -31,6 +31,8 @@ class DocDBTransformer(Transformer):
             sync_database([self.state.node], self.collection, use_cache=True)
             result['nodes'].append(self.state.node.to_dict())
     
+        return result
+    
     def transit(self, next_state: State, auto_run: bool = True):          
         self.state = next_state
         

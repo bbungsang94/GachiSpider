@@ -14,7 +14,7 @@ _ERROR_MAP = {
 }
 
 def get_error_code(message: str):
-    caps = message.capitalize()
+    caps = message.upper()
     if caps not in _ERROR_MAP:
         return -1
     else:

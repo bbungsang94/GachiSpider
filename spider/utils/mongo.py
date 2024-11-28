@@ -30,6 +30,6 @@ def sync_database(nodes: List[Node], collection, use_cache=True):
     return existing_nodes + new_nodes
 
 def get_data_with(collection, label="store"):
-    existing_nodes = collection.find({"label": "store"}, Node.get_fields(begin=1))
+    existing_nodes = collection.find({"label": label}, Node.get_fields(begin=1))
     existing_nodes = [Node.from_dict(node) for node in existing_nodes]
     return existing_nodes

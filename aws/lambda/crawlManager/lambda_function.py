@@ -7,7 +7,7 @@ def lambda_handler(event, context):
     db_ip = event.get('db_ip')
     db_port = event.get('db_port')
     
-    init_logging(logging.DEBUG, "link-manager-using-lambda.log", dir_path='/tmp/')
+    init_logging(logging.INFO, "link-manager-using-lambda.log", dir_path='/tmp/')
     link_manager = CloudLinker(init_url=None, db_ip=db_ip, db_port=db_port)
     
     result_dict = {'root': url, 'db_ip': db_ip, 'db_port': db_port}

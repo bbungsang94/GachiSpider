@@ -1,4 +1,9 @@
 {
+    "https://aagag.com/mirror/?time=3&site=bobae|clien|humor|inven|mlbpark|ou|ppomppu|ruli&select=multi":{
+        "region": "universal",
+        "kind": "bulletin",
+        "period": 24
+    },
     "https://aagag.com/mirror/?orderby=hit&site=bobae|inven|ruli|mlbpark|ppomppu&time=12&select=multi":{
         "region": "universal",
         "kind": "bulletin",

@@ -50,7 +50,7 @@ class Collect(State):
         
         return saved_path
     
-    def __upload(self, local_path, storage_path) -> str:
+    def __upload(self, local_path, storage_path, **kwargs) -> str:
         self.s3_client.upload_file(local_path, self.bucket_name, storage_path)
         return "s3://{storage_path}"
       
