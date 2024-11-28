@@ -44,6 +44,8 @@ def get_unwrapped_url(url, agent_name="Mozilla/5.0 (Windows NT 10.0; Win64; x64)
         return None, None
 
 def download_media(url, save_path):
+    factor = 0.4 + (random.random() * 0.4 - 0.2)
+    time.sleep(factor) # for webmaster
     request = Request(urljoin("https://", url), headers=get_default_header())
     try:
         with urlopen(request) as response:
