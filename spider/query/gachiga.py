@@ -16,6 +16,7 @@ class GachiGaHandler(Handler):
         root_url = node.fan_in[0]
         meta_data = copy.deepcopy(self._meta_data)
         meta_data['content'] = node.cache
+        meta_data['title'] = node.data['title'][-1]['text']
         if len(node.data['images']) > 0:
             meta_data['thumbnail_photo_url'] = node.data['images'][0]['saved_path']
         info = {'post': Post()}        
@@ -37,7 +38,6 @@ class GachiGaHandler(Handler):
             for key, value in info.items():
                 value.update(meta_data)
                 meta_data['post_id'] = self._insert_data(key, value)
-            self.db_client.close()
         else:
             raise RuntimeError
     
@@ -54,6 +54,9 @@ class GachiGaHandler(Handler):
     def _make_query(self, table_name: str, entity: Entity):
         entity_dict = entity.to_dict()
         columns = ", ".join(f"`{key}`" for key in entity_dict.keys())  # Add backticks for column names
-        values = ", ".join(f"'{value}'" if isinstance(value, str) else str(value) for value in entity_dict.values())
+        values = ", ".join(
+            "NULL" if value is None else f"'{value.replace("'", '"')}'" if isinstance(value, str) else str(value)
+            for value in entity_dict.values()
+            )
         query = f"INSERT INTO `{table_name}` ({columns}) VALUES ({values});"
         return query

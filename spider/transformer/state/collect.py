@@ -14,7 +14,7 @@ class Collect(State):
     def __init__(self, node: Node, parent):
         super(Collect, self).__init__("collect", node=node, parent=parent)
         self.save_root = "/tmp/"
-        self.bucket_name = "gachiga-future"
+        self.bucket_name = "gachiga"
         self.s3_client = boto3.client(service_name="s3", region_name="ap-northeast-2")
         self.bridge_directory = datetime.today().strftime("%Y/%m/%d")
     
@@ -25,6 +25,7 @@ class Collect(State):
             os.makedirs(file_root)
         
         filename = str(uuid.uuid1())
+        filename = filename + '/' + filename
         if category == "images":
             if ".gif" in url:
                 filename += ".gif"
@@ -36,12 +37,13 @@ class Collect(State):
             self.logger.warning("Unrecognized file format")
             return None
         
-        return {
+        result = {
             'local_path': os.path.join(file_root, filename),
             'storage_path': os.path.join(category, self.bridge_directory, filename),
             'url': url,
             "filename": filename
         }
+        return result
         
     def __download(self, url, local_path, **kwargs) -> str:
         saved_path = download_media(url=url, save_path=local_path)
@@ -52,7 +54,7 @@ class Collect(State):
     
     def __upload(self, local_path, storage_path, **kwargs) -> str:
         self.s3_client.upload_file(local_path, self.bucket_name, storage_path)
-        return f"s3://{storage_path}"
+        return storage_path
       
     def run(self):
         self.node.cache = {'urls': [], 'tmp_paths': [], 'storage_paths': []}

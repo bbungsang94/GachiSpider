@@ -17,6 +17,9 @@ class Handler:
         except Exception as e:
             raise ConnectionError
 
+    def __del__(self):
+        self.db_client.close()    
+        
     def run(self):
         pass
     

@@ -27,6 +27,7 @@ def lambda_handler(event, context):
         for node_raw in kwargs['nodes']:
             node = Node.from_dict(node_raw)
             handler.run(node=node)
+        handler.db_client.close()
         return {'statusCode': 200, 'message': "Succeeded"}
     
     except Exception as e:
