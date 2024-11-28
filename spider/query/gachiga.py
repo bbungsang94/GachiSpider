@@ -11,16 +11,19 @@ class GachiGaHandler(Handler):
         config_root = "./spider/configs"
         self.root_nodes = get_json(config_root, "root nodes.json")
         self._meta_data = {"author_id": 867, "view_count": 0, "created_date_time": self.created_time, "last_modified_date_time": self.created_time, "entity_status": "ACTIVE", "sub_category": "", "like_count": 0, "comment_count": 0}
-        
+
     def run(self, node: Node):
         root_url = node.fan_in[0]
         meta_data = copy.deepcopy(self._meta_data)
+        meta_data['content'] = node.cache
+        if len(node.data['images']) > 0:
+            meta_data['thumbnail_photo_url'] = node.data['images'][0]['saved_path']
         info = {'post': Post()}        
         if root_url in self.root_nodes:
             root_meta = self.root_nodes[root_url]
             stub = {
                 'country_code': get_region_code(root_meta["region"]),
-                'category': root_meta['kind'].capitalize(),
+                'category': root_meta['kind'].upper(),
                 'dtype': root_meta['kind'].lower()
             }
             if 'subtitle' in root_meta:

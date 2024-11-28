@@ -52,14 +52,14 @@ class Collect(State):
     
     def __upload(self, local_path, storage_path, **kwargs) -> str:
         self.s3_client.upload_file(local_path, self.bucket_name, storage_path)
-        return "s3://{storage_path}"
+        return f"s3://{storage_path}"
       
     def run(self):
         self.node.cache = {'urls': [], 'tmp_paths': [], 'storage_paths': []}
         data = self.node.data
         self.logger.info("Check media files in %s" % self.node.url)     
         for category, contents in data.items():
-            for content in contents:
+            for i, content in enumerate(contents):
                 if 'attrs' in content and content['attrs'] != None and 'src' in content['attrs']:
                     paths = self.__get_paths(category=category, url=content['attrs']['src'])
                     if paths == None:
@@ -71,6 +71,7 @@ class Collect(State):
                         self.logger.info("Media source downloaded, saved to %s" % saved_path)
                         saved_path = self.__upload(**paths)
                         self.logger.info("Media uploaded successfully to %s" % saved_path)
+                        self.node.data[category][i]["saved_path"] = saved_path
                         
                         self.node.cache['urls'].append(paths['url'])
                         self.node.cache['tmp_paths'].append(paths['local_path'])

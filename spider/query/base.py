@@ -25,11 +25,3 @@ class Handler:
         
         if auto_run:
             self.state.run()
-
-
-if __name__ == "__main__":
-    import os
-    DB_HOST = os.getenv('host')  # RDS Endpoint
-    DB_USER = os.getenv('user')  # 사용자 이름
-    DB_PASSWORD = os.getenv('password')  # 비밀번호
-    DB_NAME = os.getenv('database')  # 데이터베이스 이름

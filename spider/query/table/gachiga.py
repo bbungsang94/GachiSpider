@@ -6,10 +6,13 @@ class Post(Entity):
     author_id: int = 0
     title: str = ""
     content: str = ""
+    thumbnail_photo_url: str = None
     category: str = ""
     country_code: int = 0
     view_count: int = 0
     entity_status: str = ""
+    state_code: str = ""
+    city_code: str = ""
     created_date_time: str = ""
     last_modified_date_time: str = ""
     dtype: str = ""
@@ -28,7 +31,7 @@ class Bulletin(Entity):
     comment_count: int = 0
 
 def get_region_code(region: str):
-    region = region.capitalize()
+    region = region.upper()
     alternatives = [
         "UNIVERSAL",
         "KR", "US", "JP", "CN", "VN", "SG",
@@ -44,4 +47,4 @@ def get_region_code(region: str):
     
     region_map["ALL"] = total_value
     
-    return None if region in region_map else region_map[region]
+    return None if region not in region_map else region_map[region]

@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from spider.crawler.base import Crawler
 from spider.structure import Node, State
 from spider.utils.errors import get_error_code
+from spider.utils.mongo import get_data_with
 from .state import Fetch, UpdateMongo
 
 
@@ -19,32 +20,15 @@ class LambdaCrawler(Crawler):
             self.logger.info("Server Information: {0}".format(server_info))
             self.collection = client['Pages']
             self.collection = self.collection['Nodes']
+            
+            self.alternatives = get_data_with(self.collection, label='Unwrapped')
         except Exception as e:
             self.logger.error("Failed DB connection")
             self.collection = None
         
-    def crawl(self, url):
-        try:
-            self.logger.info("Find exists url, init crawling")
-            existing_nodes = self.collection.find({"url": {"$in": [url]}}, Node.get_fields(begin=1))
-            existing_nodes = [Node.from_dict(node) for node in existing_nodes]
-            if len(existing_nodes) == 0:
-                raise FileNotFoundError
-        except Exception as e:
-            self.logger.error("Not found url, Please check endpoint")
-            message = "Not found url in DB"
-            return {
-                'statusCode': get_error_code(message),
-                'message': message,
-                }
-            
-        if len(existing_nodes) > 1:
-            self.logger.warning("Duplicated %s, Merge information" % (existing_nodes[0].url))
-            existing_nodes = self.eliminate_duplicated_data(existing_nodes, self.collection)
-        existing_node = existing_nodes[-1]
-        
-        if existing_node.label.lower() == "unwrapped":
-            self.state = Fetch(node=existing_node, parent=self)
+    def crawl(self, node):
+        if node.label.lower() == "unwrapped":
+            self.state = Fetch(node=node, parent=self)
             self.state.run()
             message = self.state.node.label
         else:
