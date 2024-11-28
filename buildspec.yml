@@ -24,6 +24,7 @@ phases:
       - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlParser/
       - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlManager/
       - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlTransformer/
+      - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlQuery/
       
       - echo "Uploading crawlParser"
       - cd ./aws/lambda/crawlParser
@@ -41,6 +42,18 @@ phases:
       - cd ./aws/lambda/crawlTransformer
       - zip -r ../crawlTransformer.zip ./*
       - aws s3 cp ../crawlTransformer.zip s3://creadto/lambda/crawlTransformer.zip
+      - cd ../../../
+
+      - echo "Uploading crawlQuery"
+      - cd ./aws/lambda/crawlQuery
+      - zip -r ../crawlQuery.zip ./*
+      - aws s3 cp ../crawlQuery.zip s3://creadto/lambda/crawlQuery.zip
+      - cd ../../../
+
+      - echo "Uploading replaceNATGateway"
+      - cd ./aws/lambda/replaceNATGateway
+      - zip -r ../replaceNATGateway.zip ./*
+      - aws s3 cp ../replaceNATGateway.zip s3://creadto/lambda/replaceNATGateway.zip
       - cd ../../../
       
   post_build:

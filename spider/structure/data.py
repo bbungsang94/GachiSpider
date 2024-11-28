@@ -1,22 +1,15 @@
 from dataclasses import dataclass, asdict, fields
-from typing import Dict, List
-
 
 @dataclass
-class Node:
-    url: str
-    freshness: float = 0
-    last_visited: float = None
-    cache: object = None
-    label: str = None
-    data: object = None
-    pattern: str = None
-    fan_in: List[object] = None
-    fan_out: List[object] = None
-    
+class Entity:    
     def to_dict(self):
         return asdict(self)
     
+    def update(self, data: dict[str, object]):
+        for key, value in data.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        
     @classmethod
     def get_fields(cls, begin=1):
         return {f.name: i + begin for i, f in enumerate(fields(cls))}

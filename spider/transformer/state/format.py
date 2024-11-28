@@ -5,7 +5,7 @@ from spider.structure import Node, State
 from bs4 import BeautifulSoup
 
 from spider.utils.web import clean_text
-from .query import Query
+from .succeeded import Succeeded
 from .failed import Failed
 
 
@@ -48,22 +48,23 @@ class Format(State):
         data = self.node.data
         cache = self.node.cache
         urls = cache['urls']
-        tmp_paths = cache['tmp_paths']
         storage_paths = cache['storage_paths']
 
         html = data['html'][-1]['text']
         soup = BeautifulSoup(html, 'html.parser')
         
         for element in soup.find_all(True):
-            if 'src' in element.attrs and element.attrs['src'] in cache:
-                saved_path = tmp_paths[self._find_index(element.attrs['src'], urls)]
-                if saved_path is not None:
-                    self.body += self._make_element(saved_path, "images")
+            if 'src' in element.attrs:
+                index = self._find_index(element.attrs['src'], urls)
+                if index != None:  
+                    saved_path = storage_paths[index]
+                    if saved_path is not None:
+                        self.body += self._make_element(saved_path, "images")
             
             text_content = element.get_text(strip=True)
             cleaned_text = clean_text(text_content)
             if len(cleaned_text) > 0:
-                self.body += self._make_element(saved_path, "texts")
+                self.body += self._make_element(cleaned_text, "texts")
         
         t_mark = '\t' * self.form['depth']
         for post in self.form['tail']:
@@ -75,7 +76,7 @@ class Format(State):
         try:
             self.node.cache = self._make_body()
             self.node.label = "Transformed"
-            self.parent.transit(Query(node=self.node, parent=self.parent))
+            self.parent.transit(Succeeded(node=self.node, parent=self.parent))
         except Exception as e:
             self.node.label = "Failed Formatting"
             self.parent.transit(Failed(node=self.node, parent=self.parent))

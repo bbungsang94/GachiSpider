@@ -23,11 +23,13 @@ class DocDBTransformer(Transformer):
             self.alternatives = None    
 
     def run(self):
+        result = {"nodes": []}
         for node in self.alternatives:
             self.state = Collect(node=node, parent=self)
             self.state.run()
             
             sync_database([self.state.node], self.collection, use_cache=True)
+            result['nodes'].append(self.state.node.to_dict())
     
     def transit(self, next_state: State, auto_run: bool = True):          
         self.state = next_state
