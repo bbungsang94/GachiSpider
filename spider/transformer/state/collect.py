@@ -19,13 +19,13 @@ class Collect(State):
         self.bridge_directory = datetime.today().strftime("%Y/%m/%d")
     
     def __get_paths(self, category, url) -> Dict[str, str]:
-        file_root = os.path.join(self.save_root, category, self.bridge_directory)
+        filename = str(uuid.uuid1())
+        file_root = os.path.join(self.save_root, category, self.bridge_directory, filename)
+        storage_root = os.path.join(category, self.bridge_directory, filename)
         if os.path.exists(file_root) == False:
-            self.logger.warning("Not found dir: %s, make dirs" % (file_root))
+            self.logger.info("%s, make dirs" % (file_root))
             os.makedirs(file_root)
         
-        filename = str(uuid.uuid1())
-        filename = filename + '/' + filename
         if category == "images":
             if ".gif" in url:
                 filename += ".gif"
@@ -39,7 +39,7 @@ class Collect(State):
         
         result = {
             'local_path': os.path.join(file_root, filename),
-            'storage_path': os.path.join(category, self.bridge_directory, filename),
+            'storage_path': os.path.join(storage_root, filename),
             'url': url,
             "filename": filename
         }
