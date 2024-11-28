@@ -5,7 +5,6 @@ from datetime import datetime
 
 import boto3
 from spider.structure import Node, State
-from spider.utils.io import get_json
 from spider.utils.web import download_media
 from .format import Format
 from .failed import Failed

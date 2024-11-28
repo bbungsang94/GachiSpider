@@ -48,6 +48,7 @@ class Format(State):
         data = self.node.data
         cache = self.node.cache
         urls = cache['urls']
+        tmp_paths = cache['tmp_paths']
         storage_paths = cache['storage_paths']
 
         html = data['html'][-1]['text']
@@ -57,7 +58,7 @@ class Format(State):
             if 'src' in element.attrs:
                 index = self._find_index(element.attrs['src'], urls)
                 if index != None:  
-                    saved_path = storage_paths[index]
+                    saved_path = tmp_paths[index]
                     if saved_path is not None:
                         self.body += self._make_element(saved_path, "images")
             
