@@ -55,6 +55,12 @@ phases:
       - zip -r ../replaceNATGateway.zip ./*
       - aws s3 cp ../replaceNATGateway.zip s3://creadto/lambda/replaceNATGateway.zip
       - cd ../../../
+
+      - echo "Uploading deleteNATGateway"
+      - cd ./aws/lambda/deleteNATGateway
+      - zip -r ../deleteNATGateway.zip ./*
+      - aws s3 cp ../deleteNATGateway.zip s3://creadto/lambda/deleteNATGateway.zip
+      - cd ../../../
       
   post_build:
     commands:
