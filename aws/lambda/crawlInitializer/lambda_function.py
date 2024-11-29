@@ -2,14 +2,14 @@ import json
 
 def lambda_handler(event, context):
     result = dict()
-    records = event.get("Records", [])
-    if len(records) > 1:
+    print(event)
+    if len(event) > 1:
         raise RuntimeError
     
     try:
-        record = records[-1]
+        record = event[0]['body']
         # SQS 메시지 본문 추출
-        body = json.loads(record["body"])
+        body = json.loads(record)
         
         # 메시지 처리 로직
         print(f"Received message: {body}")
