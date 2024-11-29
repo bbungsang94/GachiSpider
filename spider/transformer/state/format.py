@@ -60,11 +60,11 @@ class Format(State):
                     saved_path = storage_paths[index]
                     if saved_path is not None:
                         self.body += self._make_element(saved_path, "images")
-            
-            text_content = element.get_text(strip=True)
-            cleaned_text = clean_text(text_content)
-            if len(cleaned_text) > 0:
-                self.body += self._make_element(cleaned_text, "texts")
+            else:
+                text_content = element.get_text(strip=True)
+                cleaned_text = clean_text(text_content)
+                if len(cleaned_text) > 0:
+                    self.body += self._make_element(cleaned_text, "texts")
         
         t_mark = '\t' * self.form['depth']
         for post in self.form['tail']:
