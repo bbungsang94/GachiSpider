@@ -1,7 +1,28 @@
+import json
 
 def lambda_handler(event, context):
-    url = event.get('url')
-    db_ip = event.get('db_ip')
-    db_port = event.get('db_port')
+    result = dict()
+    records = event.get("Records", [])
+    if len(records) > 1:
+        raise RuntimeError
     
-    return {'statusCode': 201, 'message': "Get message", 'url': url, 'db_ip': db_ip, 'db_port': db_port}
+    try:
+        record = records[-1]
+        # SQS 메시지 본문 추출
+        body = json.loads(record["body"])
+        
+        # 메시지 처리 로직
+        print(f"Received message: {body}")
+        
+        # 필요한 작업 수행
+        url = body.get("url")
+        db_ip = body.get("db_ip")
+        db_port = body.get("db_port")
+        
+        result.update({"statusCode": 200, "url": url, "db_ip": db_ip, "db_port": db_port})  
+        return result
+
+    except Exception as e:
+        # 예외 처리
+        print(f"Error processing message: {e}")
+        raise e  # 예외를 다시 던지면 Lambda가 실패 상태로 처리함
