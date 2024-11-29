@@ -8,6 +8,8 @@ class Entity:
     def update(self, data: dict[str, object]):
         for key, value in data.items():
             if hasattr(self, key):
+                if isinstance(value, str):
+                    value = value.replace("'", '"')
                 setattr(self, key, value)
         
     @classmethod

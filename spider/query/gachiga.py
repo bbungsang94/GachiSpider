@@ -55,7 +55,7 @@ class GachiGaHandler(Handler):
         entity_dict = entity.to_dict()
         columns = ", ".join(f"`{key}`" for key in entity_dict.keys())  # Add backticks for column names
         values = ", ".join(
-            "NULL" if value is None else f"'{value.replace("'", '"')}'" if isinstance(value, str) else str(value)
+            "NULL" if value is None else f"'{value}'" if isinstance(value, str) else str(value)
             for value in entity_dict.values()
             )
         query = f"INSERT INTO `{table_name}` ({columns}) VALUES ({values});"
