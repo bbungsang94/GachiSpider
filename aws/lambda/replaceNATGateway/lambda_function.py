@@ -60,8 +60,15 @@ def lambda_handler(event, context):
         if not association_id:
             print(f"Releasing unassociated Elastic IP: {address['PublicIp']} (Allocation ID: {allocation_id})")
             aws_client.release_address(AllocationId=allocation_id)
-            
-    return {
-        'statusCode': 200,
-        'message': ""
-    }
+    
+    
+    kw_map = {'statusCode': 'statusCode', 'message': 'message',
+              'url': 'url', 'db_ip': 'db_ip', 'db_port': 'db_port'}
+    
+    kwargs = dict()
+    for event_key, key in kw_map.items():
+        kwargs[key] = event.get(event_key)
+
+    kwargs.update({'statusCode': 200, 'message': ""})
+    
+    return kwargs

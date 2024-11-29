@@ -7,8 +7,6 @@ from spider.utils.logging import init_logging
 
 def lambda_handler(event, context):
     kw_map = {'statusCode': 'status', 'message': 'message',
-              'root': 'root_url', 'urls': 'urls',
-              'db_ip': 'db_ip', 'db_port': 'db_port',
               'nodes': 'nodes'}
     
     kwargs = dict()

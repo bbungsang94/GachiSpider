@@ -4,7 +4,6 @@ from spider.utils.logging import init_logging
 
 def lambda_handler(event, context):
     kw_map = {'statusCode': 'status', 'message': 'message',
-              'root': 'root_url', 'urls': 'urls',
               'db_ip': 'db_ip', 'db_port': 'db_port'}
     
     kwargs = dict()
@@ -20,5 +19,5 @@ def lambda_handler(event, context):
     else:
         result = transformer.run()
         result_dict.update(result)
-        result_dict.update({'statusCode': 201, 'message': "Unclear Succeeded"})
+        result_dict.update({'statusCode': 200, 'message': "Unclear Succeeded"})
     return result_dict
