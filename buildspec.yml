@@ -26,6 +26,12 @@ phases:
       - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlTransformer/
       - cp -r ./aws/lambda/Lib/* ./aws/lambda/crawlQuery/
       
+      - echo "Uploading pending process from SQS"
+      - cd ./aws/lambda/crawlInitializer
+      - zip -r ../crawlInitializer.zip ./*
+      - aws s3 cp ../crawlInitializer.zip s3://creadto/lambda/crawlInitializer.zip
+      - cd ../../../
+
       - echo "Uploading crawlParser"
       - cd ./aws/lambda/crawlParser
       - zip -r ../crawlParser.zip ./*
