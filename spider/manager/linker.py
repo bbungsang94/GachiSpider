@@ -25,7 +25,7 @@ class CloudLinker(Linker):
         except Exception as e:
             self.logger.error("Failed DB connection")
             self.collection = None
-        self.alternatives = None
+        self.alternatives = []
         
     def crawl(self, url):
         result_dict = dict()
