@@ -19,7 +19,7 @@ class Extract(State):
                 if parsed_url.hostname == None:
                     self.node.fan_out[i].url = urljoin(base_url, node.url)
                 
-                form_dict = get_form(node=self.node.fan_out[i], logger=self.logger)
+                form_dict = get_form(node=node, logger=self.logger)
                 self.node.fan_out[i] = form_dict['node']
                 if form_dict['form'] is None:
                     self.node.fan_out[i].label = "Not found correct form"          

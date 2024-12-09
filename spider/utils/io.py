@@ -24,7 +24,7 @@ def get_form(node, root="./spider/form", **kwargs):
     file_path = osp.join(root, 'index.json') 
     if not osp.exists(file_path):
         message = "Not found %s" % parsed_url.netloc
-        logger.warning(message) if logger is not None else print(message)
+        logger.info(message) if logger is not None else print(message)
         return result
     
     with open (file_path, "r") as f:
@@ -32,11 +32,11 @@ def get_form(node, root="./spider/form", **kwargs):
     
     for key, form in data.items():
         message = "Compare key: %s" % key
-        logger.warning(message) if logger is not None else print(message)
-        result = re.search(key, urljoin(parsed_url.path, parsed_url.query))
-        if result is not None:
+        logger.info(message) if logger is not None else print(message)
+        searched = re.search(key, urljoin(parsed_url.path, parsed_url.query))
+        if searched is not None:
             message = "Found form from: %s" % file_path
-            logger.warning(message) if logger is not None else print(message)
+            logger.info(message) if logger is not None else print(message)
             result['node'].pattern = key
             result['form'] = form
             break
