@@ -1,10 +1,6 @@
-import re
-import json
-import json
-import os.path as osp
-from urllib.parse import urlparse, urljoin
 from bs4 import BeautifulSoup as bs
 from spider.structure import Node, State
+from spider.utils.io import get_form
 from spider.utils.web import clean_text
 from .store import StoreLocal
 from .failed import Failed
@@ -12,8 +8,9 @@ from .failed import Failed
 class Parse(State):
     def __init__(self, node: Node, parent):
         super(Parse, self).__init__("parse", node=node, parent=parent)
-        self.form = self._get_form()
-        if self.form is None:
+        form_dict = get_form(node=self.node, logger=self.logger)
+        self.node = form_dict['node']
+        if form_dict['form'] is None:
             self.node.label = "Not found correct form"
             self.parent.transit(Failed(node=self.node, parent=self.parent))
         
@@ -32,27 +29,6 @@ class Parse(State):
     
     def stop(self):
         raise NotImplementedError
-    
-    def _get_form(self):
-        root = "./spider/form"
-        parsed_url = urlparse(self.node.url.replace('www.', ''))
-        root = osp.join(root, parsed_url.netloc)
-        file_path = osp.join(root, 'index.json') 
-        if not osp.exists(file_path):
-            self.logger.warning("Not found %s" % parsed_url.netloc)
-            return None
-        
-        with open (file_path, "r") as f:
-            data = json.load(f)
-        
-        for key, form in data.items():
-            self.logger.debug("Compare key: %s" % key)
-            result = re.search(key, urljoin(parsed_url.path, parsed_url.query))
-            if result is not None:
-                self.node.pattern = key
-                self.logger.info("Found form from: %s" % file_path)
-                return form
-        return None
     
     def _parse(self):
         gathered = dict()

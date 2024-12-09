@@ -28,6 +28,10 @@ class Unwrap(State):
     
     def _check_sanity(self, nodes: List[Node]) -> List[Node]:
         for i, node in enumerate(nodes):
+            # 여기까진 pure한 상태라 label이 있을 수가 없음
+            if node.label is not None:
+                continue
+            
             contents, url = get_unwrapped_url(node.url)
             if url is not None:
                 nodes[i].url = url
