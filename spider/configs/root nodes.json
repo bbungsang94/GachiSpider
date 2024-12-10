@@ -22,61 +22,49 @@
     "https://news.naver.com/breakingnews/section/100/269":{
         "region": "korea",
         "kind": "news",
-        "subtitle": "politics",
+        "subtitle": "POLITICS",
         "period": 12
     },
-    "https://news.naver.com/section/101":{
+    "https://news.naver.com/breakingnews/section/105/228":{
         "region": "korea",
         "kind": "news",
-        "subtitle": "economics",
+        "subtitle": "SCIENCE",
         "period": 12
     },
-    "https://news.naver.com/section/102":{
+    "https://news.naver.com/breakingnews/section/103/237":{
         "region": "korea",
         "kind": "news",
-        "subtitle": "society",
+        "subtitle": "POLITICS",
         "period": 12
     },
-    "https://news.naver.com/section/105":{
+    "https://news.naver.com/breakingnews/section/103/242":{
         "region": "korea",
         "kind": "news",
-        "subtitle": "science",
+        "subtitle": "LIFESTYLE",
         "period": 12
     },
-    "https://www.hankookchon.com/local1":{
-        "region": "singapore",
-        "kind": "real_estate",
-        "subtitle": "broker",
-        "period": 48
+    "https://news.naver.com/breakingnews/section/104/322":{
+        "region": "korea",
+        "kind": "news",
+        "subtitle": "WORLD",
+        "period": 12
     },
-    "https://www.hankookchon.com/local2":{
-        "region": "singapore",
-        "kind": "real_estate",
-        "subtitle": "user",
-        "period": 48
+    "https://news.naver.com/breakingnews/section/103/245":{
+        "region": "korea",
+        "kind": "news",
+        "subtitle": "CULTURE",
+        "period": 12
     },
-    "https://www.hankookchon.com/mkt?s1=676":{
-        "region": "singapore",
-        "kind": "flea_market",
-        "subtitle": "sell",
-        "period": 48
+    "https://news.naver.com/breakingnews/section/102/257":{
+        "region": "korea",
+        "kind": "news",
+        "subtitle": "SOCIETY",
+        "period": 12
     },
-    "https://www.hankookchon.com/mkt?s1=675":{
-        "region": "singapore",
-        "kind": "flea_market",
-        "subtitle": "buy",
-        "period": 48
-    },
-    "https://www.hankookchon.com/job_b":{
-        "region": "singapore",
-        "kind": "jobs",
-        "subtitle": "job opening",
-        "period": 240
-    },
-    "https://www.hankookchon.com/job_m":{
-        "region": "singapore",
-        "kind": "jobs",
-        "subtitle": "job search",
-        "period": 240
+    "https://news.naver.com/breakingnews/section/101/263":{
+        "region": "korea",
+        "kind": "news",
+        "subtitle": "ECONOMY",
+        "period": 12
     }
 }
