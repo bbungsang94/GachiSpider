@@ -62,8 +62,11 @@ class Collect(State):
         self.logger.info("Check media files in %s" % self.node.url)     
         for category, contents in data.items():
             for i, content in enumerate(contents):
-                if 'attrs' in content and content['attrs'] != None and 'src' in content['attrs']:
+                if 'attrs' in content and content['attrs'] != None:
                     keys = [key for key in content['attrs'].keys() if 'src' in key]
+                    if len(keys) == 0:
+                        continue
+                    
                     paths = self.__get_paths(category=category, url=content['attrs'][keys[0]])
                     if paths == None:
                         continue
