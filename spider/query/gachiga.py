@@ -38,8 +38,12 @@ class GachiGaHandler(Handler):
             for key, value in info.items():
                 value.update(meta_data)
                 meta_data['post_id'] = self._insert_data(key, value)
+            
+            node.label = "Frozen"
+            node.freshness = -1
+            return node
         else:
-            raise RuntimeError
+            return node
     
     def _insert_data(self, table_name: str, entity: Entity) -> int:
         post_id = -1

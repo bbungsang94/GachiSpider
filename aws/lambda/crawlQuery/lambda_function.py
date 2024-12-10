@@ -1,13 +1,16 @@
 import logging
 import os
 
+from pymongo import MongoClient
+
 from spider.query import GachiGaHandler
 from spider.structure import Node
 from spider.utils.logging import init_logging
+from spider.utils.mongo import get_data_with, sync_database
 
 def lambda_handler(event, context):
     kw_map = {'statusCode': 'status', 'message': 'message',
-              'nodes': 'nodes'}
+              'nodes': 'nodes', 'db_ip': 'db_ip', 'db_port': 'db_port'}
     
     kwargs = dict()
     for event_key, key in kw_map.items():
@@ -21,15 +24,21 @@ def lambda_handler(event, context):
         "database": os.getenv("database"),
     }
     try:
+        client = MongoClient(host=kwargs['db_ip'], port=kwargs['db_port'])
+        server_info = client.server_info()
+        print(server_info)
+        collection = client['Pages']
+        collection = collection['Nodes']
+        kwargs['nodes'] = get_data_with(collection, label='Transformed')
+            
         handler = GachiGaHandler(**handler_kwargs)
-        for node_raw in kwargs['nodes']:
-            node = Node.from_dict(node_raw)
-            handler.run(node=node)
+        for node in kwargs['nodes']:
+            processed_node = handler.run(node=node)
+            sync_database([processed_node], collection, use_cache=False)
         handler.db_client.close()
         return {'statusCode': 200, 'message': "Succeeded"}
     
     except Exception as e:
-        pass
         return {'statusCode': -1, 'message': "Unexpected exit"}
 
 def make_dummy_nodes(db_ip, db_port=None):
