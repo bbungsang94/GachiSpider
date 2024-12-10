@@ -20,49 +20,49 @@
         "period": 24
     },
     "https://news.naver.com/breakingnews/section/100/269":{
-        "region": "korea",
+        "region": "kr",
         "kind": "news",
         "subtitle": "POLITICS",
         "period": 12
     },
     "https://news.naver.com/breakingnews/section/105/228":{
-        "region": "korea",
+        "region": "kr",
         "kind": "news",
         "subtitle": "SCIENCE",
         "period": 12
     },
     "https://news.naver.com/breakingnews/section/103/237":{
-        "region": "korea",
+        "region": "kr",
         "kind": "news",
         "subtitle": "POLITICS",
         "period": 12
     },
     "https://news.naver.com/breakingnews/section/103/242":{
-        "region": "korea",
+        "region": "kr",
         "kind": "news",
         "subtitle": "LIFESTYLE",
         "period": 12
     },
     "https://news.naver.com/breakingnews/section/104/322":{
-        "region": "korea",
+        "region": "kr",
         "kind": "news",
         "subtitle": "WORLD",
         "period": 12
     },
     "https://news.naver.com/breakingnews/section/103/245":{
-        "region": "korea",
+        "region": "kr",
         "kind": "news",
         "subtitle": "CULTURE",
         "period": 12
     },
     "https://news.naver.com/breakingnews/section/102/257":{
-        "region": "korea",
+        "region": "kr",
         "kind": "news",
         "subtitle": "SOCIETY",
         "period": 12
     },
     "https://news.naver.com/breakingnews/section/101/263":{
-        "region": "korea",
+        "region": "kr",
         "kind": "news",
         "subtitle": "ECONOMY",
         "period": 12
