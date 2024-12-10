@@ -63,7 +63,8 @@ class Collect(State):
         for category, contents in data.items():
             for i, content in enumerate(contents):
                 if 'attrs' in content and content['attrs'] != None and 'src' in content['attrs']:
-                    paths = self.__get_paths(category=category, url=content['attrs']['src'])
+                    keys = [key for key in content['attrs'].keys() if 'src' in key]
+                    paths = self.__get_paths(category=category, url=content['attrs'][keys[0]])
                     if paths == None:
                         continue
                     

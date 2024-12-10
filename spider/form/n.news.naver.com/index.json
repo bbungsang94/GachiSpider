@@ -4,29 +4,21 @@
         "title":{
             "method": "select",
             "tag": "h2#title_area.media_end_head_headline",
-            "attrs": null
+            "attrs": ["id", "title_area", "class", ["media_end_head_headline"]]
         },
         "images":{
-            "method": "select",
-            "tag": "div.nhd_im_w._LAZY_LOADING_WRAP",
-            "attrs": null
+            "method": "find_all",
+            "tag": ["img", {"class": "_LAZY_LOADING _LAZY_LOADING_INIT_HIDE", "id": true}]
         },
         "contents": 
         {
             "method": "select",
-            "tag": "div.contents",
-            "attrs": null
-        },
-        "hits": 
-        {
-            "method": "select",
-            "tag": "span.u_likeit_text._count.num",
-            "attrs": null
+            "tag": "div#newsct_article.newsct_article._article_body"
         },
         "html":
         {
             "method": "select",
-            "tag": "div.bodyCont",
+            "tag": "div#newsct_article.newsct_article._article_body",
             "html": true
         }
     }

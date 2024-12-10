@@ -34,6 +34,7 @@ def get_unwrapped_url(url, agent_name="Mozilla/5.0 (Windows NT 10.0; Win64; x64)
     req = Request(url, headers=get_default_header(**{"User-Agent": agent_name}))
     unwrapped_url = None
     try:
+        time.sleep(factor) # for webmaster
         context = urlopen(req)
         if context.status == 200:
             unwrapped_url = context.url

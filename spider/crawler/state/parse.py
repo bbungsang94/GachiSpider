@@ -31,15 +31,23 @@ class Parse(State):
     def stop(self):
         raise NotImplementedError
     
+    def _get_attrs(self, handle, method, args):
+        if isinstance(args, str):
+            return getattr(handle, method)(args)
+        elif isinstance(args, list):
+            return getattr(handle, method)(*args)
+        elif isinstance(args, dict):
+            return getattr(handle, method)(**args)
+        else:
+            raise KeyError
+        
     def _parse(self):
         gathered = dict()
         soup = bs(self.node.cache, 'html.parser')
         for tag, value in self.form.items():
             self.logger.info(tag)
-            result = getattr(soup, value['method'])(value['tag'])
-            for i in range(len(result)):
-                self.logger.debug(result[i])
-            
+            result = self._get_attrs(soup, value['method'], value['tag'])
+                         
             if 'attrs' in value:
                 attrs = value['attrs']
                 for i, stub in reversed(list(enumerate(result))):
@@ -47,15 +55,16 @@ class Parse(State):
                         cond = not bool(stub.attrs)
                     else:
                         cond = attrs[0] in stub.attrs and stub.attrs[attrs[0]] == attrs[1]
+                    
                     if cond is False:
                         del result[i]
+                    else:
+                        self.logger.debug(result[i])
             
             if 'html' in value and value['html']:
                 gathered[tag] = [{'text': stub.prettify(), 'attrs': None} for stub in result]
             else:
-                text_content = stub.get_text(strip=True)  # 텍스트에서 공백 제거
-                cleaned_text = clean_text(text_content)
-                gathered[tag] = [{'text': cleaned_text, 'attrs': stub.attrs} for stub in result]
+                gathered[tag] = [{'text': clean_text(stub.get_text(strip=True)), 'attrs': stub.attrs} for stub in result]
 
         return gathered
     
