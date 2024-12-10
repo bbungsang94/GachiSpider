@@ -23,14 +23,14 @@ class News(Entity):
     sub_category: str = ""
     like_count: int = 0
     comment_count: int = 0
-    post_status: str = "NORMAL"
+    content_grade: str = "NORMAL"
 
 @dataclass
 class Bulletin(Entity):
     post_id: int = 0
     like_count: int = 0
     comment_count: int = 0
-    post_status: str = "NORMAL"
+    content_grade: str = "NORMAL"
 
 def get_region_code(region: str):
     region = region.upper()
