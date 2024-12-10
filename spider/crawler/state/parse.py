@@ -10,7 +10,8 @@ class Parse(State):
         super(Parse, self).__init__("parse", node=node, parent=parent)
         form_dict = get_form(node=self.node, logger=self.logger)
         self.node = form_dict['node']
-        if form_dict['form'] is None:
+        self.form = form_dict['form']
+        if self.form is None:
             self.node.label = "Not found correct form"
             self.parent.transit(Failed(node=self.node, parent=self.parent))
         
