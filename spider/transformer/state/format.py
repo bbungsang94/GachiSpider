@@ -54,8 +54,9 @@ class Format(State):
         soup = BeautifulSoup(html, 'html.parser')
         
         for element in soup.find_all(True):
-            if 'src' in element.attrs:
-                index = self._find_index(element.attrs['src'], urls)
+            keys = [key for key in element.attrs.keys() if 'src' in key]
+            if len(keys) != 0:
+                index = self._find_index(element.attrs[keys[0]], urls)
                 if index != None:  
                     saved_path = storage_paths[index]
                     if saved_path is not None:

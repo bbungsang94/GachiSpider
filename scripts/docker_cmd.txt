@@ -17,6 +17,11 @@ docker run -it --rm --gpus all --name creadtoAI -p 50051:80 creadto/gachicam
 
 ex) 공유 볼륨 Spider를 /workspace에 설정하고 상동
 docker run -it --rm --gpus all -v Spider:/workspace --name Manager -p 50051:80 -p 50054:83 creadto/gachicam:latest
+docker run -it --rm --gpus all -v Testbed:/workspace --name Test pytorch/pytorch:2.1.0-cuda12.1-cudnn8-devel
+docker run -it --rm --gpus all -v Testbed:/workspace --name Test creadto/testbed:Hair
+
+ex) shared memory 사용 (8GB)
+docker run -it --rm --gpus all --shm-size=8g -v Testbed:/workspace --name Temp creadto/testbed:Runtime
 
 ex) commit
-docker commit creadtoDev creadto/gachicam:latest
+docker commit GachiCam creadto/gachicam:latest
