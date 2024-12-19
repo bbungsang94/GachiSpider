@@ -64,7 +64,7 @@ Migrate the Scheduler to an EC2 instance connected to DocumentDB. While there ar
 
 **Query**: Responsible for delivering the processed data or information to the appropriate RDS, depending on the domain.
 
-<center><img src="./assets/crawling system.jpg" width="850px"></center>
+<center><img src="./assets/Crawling system.jpg" width="850px"></center>
 
 ## Contributions
 Contributions are welcome! If you have any improvements, please submit a pull request. Refer to ./.github/template/ for guidance. If there are additional details or any inaccuracies, feel free to use the Issues feature. Thank you.
